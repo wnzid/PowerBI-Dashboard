@@ -1,7 +1,7 @@
 import os
 from io import BytesIO
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+from cryptography.fernet import Fernet
 import sqlite3
 import pandas as pd
 from dotenv import load_dotenv
@@ -37,8 +37,23 @@ app = Flask(__name__,
             static_folder="static",
             static_url_path="/static",
             template_folder="templates")
-app.secret_key = 'supersecretkey123' #key to secure my db for user
 app.secret_key = os.getenv("SECRET_KEY", "fallback_secret")
+
+# Fernet uses AES for encryption
+FERNET_KEY = os.getenv("FERNET_KEY")
+if not FERNET_KEY:
+    FERNET_KEY = Fernet.generate_key().decode()
+cipher = Fernet(FERNET_KEY.encode())
+
+
+def encrypt_pw(password: str) -> str:
+    """Encrypt plaintext password using Fernet."""
+    return cipher.encrypt(password.encode()).decode()
+
+
+def decrypt_pw(token: str) -> str:
+    """Decrypt password token to plaintext."""
+    return cipher.decrypt(token.encode()).decode()
 
 @app.route("/managerial")
 def dashboard():
@@ -78,13 +93,13 @@ def register():
             flash("Password must be at least 12 characters long.", "error")
             return redirect(url_for("register"))
 
-        hashed_pw = generate_password_hash(password)
+        encrypted_pw = encrypt_pw(password)
 
         try:
             conn = sqlite3.connect("users.db")
             c = conn.cursor()
             c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-                      (email, hashed_pw, role))
+                      (email, encrypted_pw, role))
             conn.commit()
             conn.close()
 
@@ -137,7 +152,17 @@ def login():
 
         if result:
             stored_password, role = result
-            if check_password_hash(stored_password, password):
+            login_ok = False
+            try:
+                decrypted = decrypt_pw(stored_password)
+                if decrypted == password:
+                    login_ok = True
+            except Exception:
+                from werkzeug.security import check_password_hash
+                if check_password_hash(stored_password, password):
+                    login_ok = True
+
+            if login_ok:
                 session['email'] = email
                 session['role'] = role
 
