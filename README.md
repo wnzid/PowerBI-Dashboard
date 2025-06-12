@@ -73,25 +73,28 @@ Backend/              # Flask application
 └── templates/        # Jinja2 HTML templates
 ```
 
-## What's New (Modified Version by wnzid)
+## What's New (Final Modified Version by wnzid)
 
-The following improvements have been made to enhance the functionality, maintainability, and security of the original project:
+#### Functional Enhancements
+- Fully embedded interactive Power BI dashboards for both Manager and Stakeholder roles
+- Added PDF and Excel export functionality on dashboards
+- Integrated user activity logging (e.g., login attempts, dashboard usage)
 
-#### Backend & Security Enhancements
-- Introduced `db.py` and `init_db.py` for better database separation and initialization
-- Replaced static login with secure password hashing using `werkzeug.security`
-- Added dynamic user authentication and role-based routing (manager vs stakeholder)
-- Introduced a dedicated roles table and automatic activity logging
+#### Security & Role Management
+- Role-based access now dynamically managed via database (not hardcoded)
+- Strengthened login flow with additional logging and role validation
+- Improved `.env` configuration and `.gitignore` for safer environment variable handling
 
-#### Utility Scripts & Maintenance
-- Added `view-users.py` to help inspect and debug registered users in the database
-- Cleaned up backend folder structure and removed redundant or unused files
+#### Database & Code Quality
+- Replaced raw SQL with **SQLAlchemy ORM**
+- Integrated **Flask-Migrate** for smooth schema updates and DB version control
+- Cleaned up and modularized database interactions
 
-#### Documentation & Licensing
-- Created this detailed `README.md` with step-by-step setup instructions
-- Added an MIT License to comply with open-source distribution and ensure proper attribution
+#### UI/UX and Documentation
+- Refined landing page visuals and dashboard icons
+- Updated README with full deployment instructions
+- Project now includes a proper `LICENSE`, `.git`, and aligned structure for GitHub hosting
 
-These changes aim to make the application more production-ready and accessible for further development or academic use.
 
 ---
 
