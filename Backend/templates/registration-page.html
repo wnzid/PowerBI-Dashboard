@@ -19,7 +19,7 @@
           </div>
         {% endif %}
         {% endwith %}
-        <form id="registrationForm" action="{{ url_for('register') }}" method="post">
+        <form id="registrationForm" action="{{ url_for('auth.register') }}" method="post">
           <label for="email">Email</label>
           <input type="email" id="email" name="Email" placeholder="abc@analyticsinstitute.edu.au" required />
           <label for="password">Password</label>

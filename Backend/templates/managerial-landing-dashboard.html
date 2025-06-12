@@ -11,26 +11,26 @@
       <h2>Analytics Institute</h2>
     </div>
     <ul class="nav-links">
-      <li class="active"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-      <li><a href="{{ url_for('coming_soon', page='create-dashboard') }}">Create Dashboard</a></li>
-      <li><a href="{{ url_for('coming_soon', page='download-data') }}">Download Data</a></li>
-      <li><a href="{{ url_for('coming_soon', page='settings') }}">Settings</a></li>
+      <li class="active"><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('main.coming_soon', page='create-dashboard') }}">Create Dashboard</a></li>
+      <li><a href="{{ url_for('main.coming_soon', page='download-data') }}">Download Data</a></li>
+      <li><a href="{{ url_for('main.coming_soon', page='settings') }}">Settings</a></li>
     </ul>
   </nav>
   <main class="main-content">
     <header class="topbar">
       <div class="menu-links">
-        <a href="{{ url_for('coming_soon', page='file') }}">File</a>
-        <a href="{{ url_for('coming_soon', page='data') }}">Data</a>
-        <a href="{{ url_for('coming_soon', page='export') }}">Export</a>
-        <a href="{{ url_for('coming_soon', page='analysis') }}">Analysis</a>
-        <a href="{{ url_for('coming_soon', page='download') }}">Download</a>
-        <a href="{{ url_for('help_page') }}">Help</a>
+        <a href="{{ url_for('main.coming_soon', page='file') }}">File</a>
+        <a href="{{ url_for('main.coming_soon', page='data') }}">Data</a>
+        <a href="{{ url_for('main.coming_soon', page='export') }}">Export</a>
+        <a href="{{ url_for('main.coming_soon', page='analysis') }}">Analysis</a>
+        <a href="{{ url_for('main.coming_soon', page='download') }}">Download</a>
+        <a href="{{ url_for('main.help_page') }}">Help</a>
       </div>
       <div class="user-profile dropdown">
         <button class="dropdown-toggle">{{ session['email'].split('@')[0] | title }} ▾</button>
         <ul class="profile-dropdown">
-          <li><a id="logout-link" href="{{ url_for('logout') }}">Logout</a></li>
+          <li><a id="logout-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
         </ul>
       </div>
     </header>
@@ -41,22 +41,22 @@
       <div class="charts-grid">
         <div class="chart-card">
           <h3>Current Student vs Enrolled</h3>
-          <a class="view-report" href="{{ url_for('coming_soon', page='current-student') }}">View Report</a>
+          <a class="view-report" href="{{ url_for('main.coming_soon', page='current-student') }}">View Report</a>
           <canvas id="chart-current-enrolled"></canvas>
         </div>
         <div class="chart-card">
           <h3>Enrolled Vs Offer</h3>
-          <a class="view-report" href="{{ url_for('coming_soon', page='enrolled-offer') }}">View Report</a>
+          <a class="view-report" href="{{ url_for('main.coming_soon', page='enrolled-offer') }}">View Report</a>
           <canvas id="chart-enrolled-offer"></canvas>
         </div>
         <div class="chart-card">
           <h3>Visa Breakdown</h3>
-          <a class="view-report" href="{{ url_for('coming_soon', page='visa-breakdown') }}">View Report</a>
+          <a class="view-report" href="{{ url_for('main.coming_soon', page='visa-breakdown') }}">View Report</a>
           <canvas id="chart-visa-breakdown"></canvas>
         </div>
         <div class="chart-card">
           <h3>Offer Expiry Surge</h3>
-          <a class="view-report" href="{{ url_for('coming_soon', page='offer-expiry') }}">View Report</a>
+          <a class="view-report" href="{{ url_for('main.coming_soon', page='offer-expiry') }}">View Report</a>
           <canvas id="chart-offer-expiry-surge"></canvas>
         </div>
       </div>

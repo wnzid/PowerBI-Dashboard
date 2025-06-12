@@ -57,7 +57,10 @@ python view-users.py
 
 ```
 Backend/              # Flask application
-├── app.py            # Main app entry point
+├── app.py            # Application factory and entry point
+├── auth.py           # Authentication blueprint
+├── dashboard.py      # Dashboard blueprint
+├── main_routes.py    # General site routes blueprint
 ├── db.py             # SQLite helpers
 ├── init_db.py        # Database initialization script
 ├── view-users.py     # Utility to inspect stored users

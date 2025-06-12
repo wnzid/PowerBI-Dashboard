@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
   <div class="container-fluid px-5">
-    <a class="navbar-brand" href="{{ url_for('home') }}">
+    <a class="navbar-brand" href="{{ url_for('main.home') }}">
       <img src="{{ url_for('static', filename='Assets/logo.png') }}" alt="Logo"/>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -8,17 +8,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('reports') }}">Reports</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('help_page') }}">Help</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.reports') }}">Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.help_page') }}">Help</a></li>
       </ul>
       <div class="d-flex">
         {% if session.get('email') %}
-          <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">Logout</a>
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-secondary">Logout</a>
         {% else %}
-          <a href="{{ url_for('login') }}" class="btn btn-outline-secondary me-2">Sign in</a>
-          <a href="{{ url_for('register') }}" class="btn btn-dark">Register</a>
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary me-2">Sign in</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-dark">Register</a>
         {% endif %}
       </div>
     </div>
