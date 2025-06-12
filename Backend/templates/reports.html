@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Reports</h1>
+  <p class="lead">Interactive Power BI reports will be available here soon. You will be able to filter data, download results and explore trends once the feature is released.</p>
+  <p class="mb-4">If you require report data in the meantime, please contact our team:</p>
+  <ul>
+    <li>Email: <a href="mailto:info@analyticsinstitute.edu.au">info@analyticsinstitute.edu.au</a></li>
+    <li>Phone: (+61) 426 799 276</li>
+    <li>Address: Pearl Level 10, 607 Bourke St, Melbourne VIC 3000</li>
+  </ul>
+  <a class="btn btn-primary mt-3" href="{{ url_for('home') }}">Return Home</a>
+</div>
+{% endblock %}

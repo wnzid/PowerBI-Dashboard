@@ -117,6 +117,12 @@ def help_page():
     return render_template('help.html')
 
 
+@app.route('/reports')
+def reports():
+    """Display available Power BI reports and contact info."""
+    return render_template('reports.html')
+
+
 @app.route('/coming_soon/<page>')
 def coming_soon(page):
     """Display placeholder pages for features not yet implemented."""
