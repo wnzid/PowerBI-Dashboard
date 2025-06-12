@@ -2,10 +2,11 @@
 
 ## Database setup
 
-The backend uses a simple SQLite database stored as `Backend/users.db`.
-Both the application and helper scripts now determine the database path relative
-to the `Backend` directory. This means you can start the Flask server from any
-working directory without accidentally creating multiple database files.
+The project stores user information in a SQLite database located at
+`Backend/users.db`.  A new `db.py` module centralises the database connection
+logic so both the API in `app.py` and the web application in
+`Backend/app.py` use the same file.  This means you can start the server from
+any directory without creating multiple database copies.
 To create the database and the required `users` table, run:
 
 ```bash

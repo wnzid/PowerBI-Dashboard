@@ -1,20 +1,20 @@
 from flask import Flask, request, jsonify
-import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+from db import get_connection, init_db
+import sqlite3
 
 app = Flask(__name__)
-DB_PATH = 'users.db'
 
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS users (
+def create_schema():
+    """Ensure the users table exists."""
+    conn = get_connection()
+    conn.execute(
+        '''CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
-        )
-    ''')
+        )'''
+    )
     conn.commit()
     conn.close()
 
@@ -27,7 +27,7 @@ def register():
         return jsonify({'error': 'Missing username or password'}), 400
     hashed_pw = generate_password_hash(password)
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = get_connection()
         c = conn.cursor()
         c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_pw))
         conn.commit()
@@ -41,7 +41,7 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    conn = sqlite3.connect(DB_PATH)
+    conn = get_connection()
     c = conn.cursor()
     c.execute('SELECT password FROM users WHERE username = ?', (username,))
     row = c.fetchone()
@@ -52,5 +52,7 @@ def login():
         return jsonify({'error': 'Invalid credentials'}), 401
 
 if __name__ == '__main__':
+    # Initialize both the shared database and the local schema
     init_db()
+    create_schema()
     app.run(debug=True)

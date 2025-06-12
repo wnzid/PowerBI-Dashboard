@@ -1,24 +1,11 @@
 import os
-import sqlite3
+import sys
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
+# Ensure the repository root is on the Python path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-SCHEMA = """
-CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    role TEXT NOT NULL
-)
-"""
-
-def init_db(db_path=DB_PATH):
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute(SCHEMA)
-    conn.commit()
-    conn.close()
-    print(f"Database initialized at {db_path}.")
+from db import init_db, DB_PATH
 
 if __name__ == "__main__":
     init_db()
+    print(f"Database initialized at {DB_PATH}.")

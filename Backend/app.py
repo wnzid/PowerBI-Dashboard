@@ -1,9 +1,10 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 from cryptography.fernet import Fernet
-import sqlite3
 import pandas as pd
 from dotenv import load_dotenv
+from db import get_connection, init_db, DB_PATH
+import sqlite3  # for IntegrityError handling
 
 load_dotenv()
 
@@ -13,19 +14,7 @@ if not FERNET_KEY:
     print(f"Generated Fernet key: {FERNET_KEY} (set this as FERNET_KEY in your .env file)")
 cipher = Fernet(FERNET_KEY.encode() if isinstance(FERNET_KEY, str) else FERNET_KEY)
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
-
-def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            role TEXT NOT NULL)""")
-    conn.commit()
-    conn.close()
-
+# Initialize the user database on startup
 init_db()
 
 app = Flask(__name__,
@@ -85,7 +74,7 @@ def register():
         encrypted_pw = encrypt_pw(password)
 
         try:
-            conn = sqlite3.connect(DB_PATH)
+            conn = get_connection()
             c = conn.cursor()
             c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
                       (email, encrypted_pw, role))
@@ -108,7 +97,7 @@ def register():
         except sqlite3.IntegrityError:
             print(f"[DEBUG] IntegrityError: Email {email} already exists.")
             conn.close()
-            conn = sqlite3.connect(DB_PATH)
+            conn = get_connection()
             c = conn.cursor()
             c.execute("SELECT role FROM users WHERE email = ?", (email,))
             result = c.fetchone()
@@ -135,7 +124,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        conn = sqlite3.connect(DB_PATH)
+        conn = get_connection()
         c = conn.cursor()
         c.execute("SELECT password, role FROM users WHERE email = ?", (email,))
         result = c.fetchone()
@@ -178,7 +167,7 @@ def logout():
 @app.route("/api/data")
 def api_data():
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = get_connection()
         df = pd.read_sql_query("SELECT * FROM users", conn)
         conn.close()
         df = df.fillna(0)
