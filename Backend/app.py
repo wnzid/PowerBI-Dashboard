@@ -58,9 +58,9 @@ def create_app() -> Flask:
         db.session.commit()
 
         admin_role = Role.query.filter_by(name="Admin").first()
-        if admin_role and not User.query.filter_by(email="admin@gmai.com").first():
+        if admin_role and not User.query.filter_by(email="admin@gmail.com").first():
             hashed_pw = generate_password_hash("admin123456789")
-            admin_user = User(email="admin@gmai.com", password=hashed_pw, role_id=admin_role.id)
+            admin_user = User(email="admin@gmail.com", password=hashed_pw, role_id=admin_role.id)
             db.session.add(admin_user)
             db.session.commit()
 
