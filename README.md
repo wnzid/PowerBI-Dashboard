@@ -56,6 +56,9 @@ An administrator account is created automatically when the application starts if
 
 Only that user has access to the Flask-Admin interface.
 
+New users can register only as Manager or Stakeholder. The Admin role is
+reserved for the predefined account and is hidden from the registration form.
+
 ### Viewing Registered Users
 
 A helper script prints all registered users from the SQLite database:

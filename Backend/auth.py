@@ -21,8 +21,15 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-    form.role.choices = [(r.id, r.name) for r in Role.query.all()]
+    # Exclude the Admin role from the registration choices
+    form.role.choices = [
+        (r.id, r.name) for r in Role.query.filter(Role.name != "Admin")
+    ]
     if form.validate_on_submit():
+        selected_role = db.session.get(Role, form.role.data)
+        if selected_role and selected_role.name.lower() == "admin":
+            flash("Admin registration is not allowed", "error")
+            return redirect(url_for("auth.register"))
         if User.query.filter_by(email=form.email.data).first():
             flash('Email already exists', 'error')
             return redirect(url_for('auth.register'))
