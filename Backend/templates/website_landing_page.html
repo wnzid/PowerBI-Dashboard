@@ -4,8 +4,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='Css/landing.css') }}">
 {% endblock %}
 {% block content %}
-  <section class="hero">
-    <div>
+  <section class="hero d-flex align-items-center text-center">
+    <div class="container">
       <h2>Power BI Dashboard Portal –</h2>
       <h2>Analytics Institute of Australia</h2>
       <p>A centralized, real-time intelligence system for decision-making, insight, and strategy</p>
@@ -14,7 +14,7 @@
   </section>
   <section class="section-features bg-light">
     <div class="container">
-      <div class="row gy-4">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div class="col-lg-4">
           <div class="card text-center p-4">
             <img src="{{ url_for('static', filename='Assets/kpi.png') }}" class="card-img-top mb-3" alt="Real-Time KPIs"/>
