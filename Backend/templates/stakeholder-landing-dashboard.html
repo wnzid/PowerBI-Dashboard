@@ -6,6 +6,12 @@
 {% block content %}
   <div class="container py-5">
     <h1 class="text-center mb-4">Welcome, Stakeholder!</h1>
-    <p class="lead text-center">Your personalized analytics and reports will appear here. Check back soon for more insights.</p>
+    <div class="mb-4 text-center">
+      <iframe title="Stakeholder Report" width="100%" height="600" src="https://app.powerbi.com/view?r=STAKEHOLDER_REPORT_ID" frameborder="0" allowfullscreen="true"></iframe>
+    </div>
+    <div class="text-center">
+      <a class="btn btn-primary me-2" href="{{ url_for('dashboard.export_data', fmt='pdf') }}">Export PDF</a>
+      <a class="btn btn-secondary" href="{{ url_for('dashboard.export_data', fmt='excel') }}">Export Excel</a>
+    </div>
   </div>
 {% endblock %}
