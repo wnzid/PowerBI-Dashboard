@@ -1,8 +1,13 @@
 import os
+import sys
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 from cryptography.fernet import Fernet
 import pandas as pd
 from dotenv import load_dotenv
+# Allow importing the shared db.py module when running this file directly from
+# the Backend directory.
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from db import get_connection, init_db, DB_PATH
 import sqlite3  # for IntegrityError handling
 
