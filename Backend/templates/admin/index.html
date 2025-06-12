@@ -1,0 +1,8 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+  <div class="container py-5">
+    <h1 class="mb-4">Administration Portal</h1>
+    <p class="lead">Welcome, {{ current_user.email }}. Use the navigation above to manage users, roles and review activity logs.</p>
+    <p>You can access model management screens using the menu at the top.</p>
+  </div>
+{% endblock %}

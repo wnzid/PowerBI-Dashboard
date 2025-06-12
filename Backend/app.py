@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from extensions import mail
 from models import db, User, Role, ActivityLog
@@ -28,6 +28,20 @@ class SecureModelView(ModelView):
         return redirect(url_for("auth.login"))
 
 
+class MyAdminIndexView(AdminIndexView):
+    """Custom admin index view with access control."""
+
+    def is_accessible(self) -> bool:
+        return (
+            current_user.is_authenticated
+            and current_user.role
+            and current_user.role.name.lower() == "admin"
+        )
+
+    def inaccessible_callback(self, name: str, **kwargs):
+        return redirect(url_for("auth.login"))
+
+
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
@@ -36,6 +50,7 @@ def create_app() -> Flask:
     app.config.setdefault('MAIL_SERVER', 'localhost')
     app.config.setdefault('MAIL_PORT', 8025)
     app.config.setdefault('MAIL_DEFAULT_SENDER', 'noreply@example.com')
+    app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
 
     mail.init_app(app)
 
@@ -64,7 +79,12 @@ def create_app() -> Flask:
             db.session.add(admin_user)
             db.session.commit()
 
-    admin = Admin(app, name='Admin', template_mode='bootstrap4')
+    admin = Admin(
+        app,
+        name='Admin',
+        template_mode='bootstrap4',
+        index_view=MyAdminIndexView(template='admin/index.html')
+    )
     admin.add_view(SecureModelView(User, db.session))
     admin.add_view(SecureModelView(Role, db.session))
     admin.add_view(SecureModelView(ActivityLog, db.session))
