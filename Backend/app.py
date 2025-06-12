@@ -18,6 +18,10 @@ def create_schema():
     conn.commit()
     conn.close()
 
+@app.route('/')
+def home():
+    return jsonify({'message': 'API is running'}), 200
+
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
