@@ -4,12 +4,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='Css/registration.css') }}" />
 {% endblock %}
 {% block content %}
-  <main class="main-content-wrapper">
+  <main class="main-content-wrapper py-5 bg-light">
     <div class="main-content">
       <div class="title-box">
         <h3>Register now to start Exploring!</h3>
       </div>
-      <div class="container">
+      <div class="container bg-white p-4 rounded shadow-sm">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           <div class="flash-container">
@@ -19,15 +19,21 @@
           </div>
         {% endif %}
         {% endwith %}
-        <form id="registrationForm" action="{{ url_for('auth.register') }}" method="post">
+        <form id="registrationForm" action="{{ url_for('auth.register') }}" method="post" class="">
           {{ form.hidden_tag() }}
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="abc@analyticsinstitute.edu.au" required />
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="12 characters or longer" required />
-          <label for="role">Role</label>
-          {{ form.role(class="form-select") }}
-          <button type="submit">Register</button>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="abc@analyticsinstitute.edu.au" required />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="12 characters or longer" required />
+          </div>
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            {{ form.role(class="form-select") }}
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>
       </div>
     </div>

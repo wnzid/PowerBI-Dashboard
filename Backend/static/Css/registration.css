@@ -73,13 +73,9 @@ body, html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('/static/Assets/background.png');
-  background-size: cover;
-  background-position: center -60px;
-  background-repeat: no-repeat;
   padding-top: 40px;
   padding-bottom: 40px;
-}
+  }
 
 /* Main content block */
 .main-content {
@@ -110,9 +106,8 @@ body, html {
   background: white;
   padding: 25px;
   border-radius: 10px;
-  border: 1px solid #050404;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  width: 300px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  max-width: 400px;
 }
 
 /* Form Elements */
@@ -120,17 +115,6 @@ form label {
   display: block;
   margin-top: 15px;
   font-weight: bold;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
 }
 
 /* Checkbox group */
@@ -148,12 +132,6 @@ input[type="password"] {
 /* Submit button */
 button[type="submit"] {
   width: 100%;
-  padding: 10px;
-  background: black;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 /* Footer */
