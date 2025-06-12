@@ -10,7 +10,7 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 - Managerial dashboard with sample charts and Power BI integration placeholders
 - Stakeholder dashboard with welcome page
 - Reporting and help pages
-- SQLite database for storing user accounts
+- SQLAlchemy with SQLite and Flask-Migrate for database management
 
 ## Getting Started
 
@@ -33,7 +33,7 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 # Install dependencies
  pip install -r requirements.txt
 
-# Initialize the database
+# Initialize the database (uses Flask-Migrate)
  python init_db.py
 ```
 
@@ -61,8 +61,10 @@ Backend/              # Flask application
 ├── auth.py           # Authentication blueprint
 ├── dashboard.py      # Dashboard blueprint
 ├── main_routes.py    # General site routes blueprint
-├── db.py             # SQLite helpers
+├── db.py             # Database path configuration
 ├── init_db.py        # Database initialization script
+├── forms.py        # WTForms definitions
+├── models.py       # SQLAlchemy models
 ├── view-users.py     # Utility to inspect stored users
 ├── requirements.txt  # Python dependencies
 ├── static/           # CSS, JavaScript and images
