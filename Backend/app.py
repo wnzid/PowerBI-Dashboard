@@ -96,6 +96,21 @@ def stakeholder_dashboard():
     return render_template('stakeholder-landing-dashboard.html')
 
 
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    """Simple password reset placeholder."""
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if not email:
+            flash('Please enter your email address.', 'error')
+            return redirect(url_for('forgot_password'))
+
+        flash('If an account exists for %s, a reset link has been sent.' % email, 'info')
+        return redirect(url_for('login'))
+
+    return render_template('forgot_password.html')
+
+
 @app.route('/coming_soon/<page>')
 def coming_soon(page):
     """Display placeholder pages for features not yet implemented."""
