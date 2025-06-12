@@ -25,16 +25,8 @@
           <input type="email" id="email" name="email" placeholder="abc@analyticsinstitute.edu.au" required />
           <label for="password">Password</label>
           <input type="password" id="password" name="password" placeholder="12 characters or longer" required />
-          <div class="checkboxes">
-            <label>
-              <input type="radio" id="stakeholder" name="role" value="Stakeholder" required />
-              Register as<br><strong>Leaders</strong>
-            </label>
-            <label>
-              <input type="radio" id="manager" name="role" value="Manager" required />
-              Register as<br><strong>Manager</strong>
-            </label>
-          </div>
+          <label for="role">Role</label>
+          {{ form.role(class="form-select") }}
           <button type="submit">Register</button>
         </form>
       </div>

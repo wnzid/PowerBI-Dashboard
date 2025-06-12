@@ -7,6 +7,8 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 - Landing page highlighting real-time KPIs, multi-source integration and advanced filtering
 - User registration with hashed passwords and role selection
 - Secure login and session management
+- Roles stored in the database for dynamic role-based access control
+- Activity logging of successful and failed logins and dashboard usage
 - Managerial dashboard with sample charts and Power BI integration placeholders
 - Stakeholder dashboard with welcome page
 - Reporting and help pages
@@ -79,6 +81,7 @@ The following improvements have been made to enhance the functionality, maintain
 - Introduced `db.py` and `init_db.py` for better database separation and initialization
 - Replaced static login with secure password hashing using `werkzeug.security`
 - Added dynamic user authentication and role-based routing (manager vs stakeholder)
+- Introduced a dedicated roles table and automatic activity logging
 
 #### Utility Scripts & Maintenance
 - Added `view-users.py` to help inspect and debug registered users in the database
