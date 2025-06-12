@@ -66,6 +66,27 @@ Backend/              # Flask application
 └── templates/        # Jinja2 HTML templates
 ```
 
+## What's New (Modified Version by Md Nahidul Islam)
+
+The following improvements have been made to enhance the functionality, maintainability, and security of the original project:
+
+#### Backend & Security Enhancements
+- Introduced `db.py` and `init_db.py` for better database separation and initialization
+- Replaced static login with secure password hashing using `werkzeug.security`
+- Added dynamic user authentication and role-based routing (manager vs stakeholder)
+
+#### Utility Scripts & Maintenance
+- Added `view-users.py` to help inspect and debug registered users in the database
+- Cleaned up backend folder structure and removed redundant or unused files
+
+#### Documentation & Licensing
+- Created this detailed `README.md` with step-by-step setup instructions
+- Added an MIT License to comply with open-source distribution and ensure proper attribution
+
+These changes aim to make the application more production-ready and accessible for further development or academic use.
+
+---
+
 ## Acknowledgements
 
 This project is based on [PowerBI-Dashboard](https://github.com/nafisanafu15/PowerBI-Dashboard) by Nafisa Anjum Ahmed and is licensed under the [MIT License](https://opensource.org/licenses/MIT). Significant modifications and improvements have been made by **wnzid**.
