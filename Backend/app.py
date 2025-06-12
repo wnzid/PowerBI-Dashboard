@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection, init_db
 import sqlite3
@@ -24,51 +24,80 @@ def create_schema():
 def home():
     return render_template('website_landing_page.html')  # Render HTML instead of JSON
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    data = request.get_json(silent=True) or request.form
-    email = data.get('email') or data.get('Email')
-    password = data.get('password') or data.get('Password')
-    role = data.get('role') or data.get('Role')
-    
-    if not email or not password or not role:
-        return jsonify({'error': 'Missing email, password or role'}), 400
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        email = data.get('email') or data.get('Email')
+        password = data.get('password') or data.get('Password')
+        role = data.get('role') or data.get('Role')
+        
+        if not email or not password or not role:
+            flash('Missing email, password or role', 'error')
+            return redirect(url_for('register'))
 
-    hashed_pw = generate_password_hash(password)
-    
-    try:
+        hashed_pw = generate_password_hash(password)
+        
+        try:
+            conn = get_connection()
+            c = conn.cursor()
+            c.execute('INSERT INTO users (email, password, role) VALUES (?, ?, ?)', (email, hashed_pw, role))
+            conn.commit()
+            conn.close()
+            session['email'] = email
+            session['role'] = role
+            if role.lower() == 'manager':
+                return redirect(url_for('manager_dashboard'))
+            else:
+                return redirect(url_for('stakeholder_dashboard'))
+        except sqlite3.IntegrityError:
+            flash('Email already exists', 'error')
+            return redirect(url_for('register'))
+
+    return render_template('registration-page.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        email = data.get('email') or data.get('Email')
+        password = data.get('password') or data.get('Password')
+
         conn = get_connection()
         c = conn.cursor()
-        c.execute('INSERT INTO users (email, password, role) VALUES (?, ?, ?)', (email, hashed_pw, role))
-        conn.commit()
+        c.execute('SELECT password, role FROM users WHERE email = ?', (email,))
+        row = c.fetchone()
         conn.close()
-        return jsonify({'message': 'User registered successfully'}), 201
-    except sqlite3.IntegrityError:
-        return jsonify({'error': 'Email already exists'}), 409
 
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json(silent=True) or request.form
-    email = data.get('email') or data.get('Email')
-    password = data.get('password') or data.get('Password')
+        if row and check_password_hash(row[0], password):
+            session['email'] = email
+            session['role'] = row[1]
+            if row[1].lower() == 'manager':
+                return redirect(url_for('manager_dashboard'))
+            else:
+                return redirect(url_for('stakeholder_dashboard'))
+        else:
+            flash('Invalid credentials', 'error')
+            return redirect(url_for('login'))
 
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('SELECT password FROM users WHERE email = ?', (email,))
-    row = c.fetchone()
-    conn.close()
-
-    if row and check_password_hash(row[0], password):
-        session['username'] = email  # Store email in session as username
-        return redirect(url_for('dashboard'))
-    else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+    return render_template('login.html')
 
 @app.route('/dashboard')
-def dashboard():
-    if 'username' not in session:
-        return redirect(url_for('home'))
-    return render_template('dashboard.html', username=session['username'])
+def manager_dashboard():
+    if 'email' not in session or session.get('role', '').lower() != 'manager':
+        return redirect(url_for('login'))
+    return render_template('managerial-landing-dashboard.html')
+
+@app.route('/stakeholder')
+def stakeholder_dashboard():
+    if 'email' not in session or session.get('role', '').lower() != 'stakeholder':
+        return redirect(url_for('login'))
+    return render_template('stakeholder-landing-dashboard.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     init_db()
