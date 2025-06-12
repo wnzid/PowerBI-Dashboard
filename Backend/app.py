@@ -22,7 +22,7 @@ def create_schema():
 
 @app.route('/')
 def home():
-    return render_template('landing.html')  # Render HTML instead of JSON
+    return render_template('website_landing_page.html')  # Render HTML instead of JSON
 
 @app.route('/register', methods=['POST'])
 def register():
