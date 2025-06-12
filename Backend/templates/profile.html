@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/login.css') }}" />
+{% endblock %}
+{% block content %}
+<main class="login-main py-5 bg-light">
+  <div class="login-card shadow-sm bg-white p-4 rounded">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, msg in messages %}
+        <li class="flash {{ category }}">{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% endwith %}
+    <h2 class="login-title">Update Profile</h2>
+    <form action="{{ url_for('auth.profile') }}" method="post" class="login-form mb-4">
+      {{ profile_form.hidden_tag() }}
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        {{ profile_form.email(class="form-control", id="email") }}
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+    </form>
+    <h2 class="login-title">Change Password</h2>
+    <form action="{{ url_for('auth.change_password') }}" method="post" class="login-form">
+      {{ pw_form.hidden_tag() }}
+      <div class="mb-3">
+        <label for="current_password" class="form-label">Current Password</label>
+        {{ pw_form.current_password(class="form-control", id="current_password") }}
+      </div>
+      <div class="mb-3">
+        <label for="new_password" class="form-label">New Password</label>
+        <div class="password-wrapper">
+          {{ pw_form.new_password(class="form-control", id="new_password") }}
+          <button type="button" class="toggle-password btn btn-link p-0">Show</button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="confirm" class="form-label">Confirm Password</label>
+        {{ pw_form.confirm(class="form-control", id="confirm") }}
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Change Password</button>
+    </form>
+  </div>
+</main>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='Js/login.js') }}"></script>
+{% endblock %}
