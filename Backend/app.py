@@ -84,7 +84,8 @@ def create_app() -> Flask:
         app,
         name='Admin',
         template_mode='bootstrap4',
-        index_view=MyAdminIndexView(template='admin/index.html')
+        index_view=MyAdminIndexView(template='admin/index.html'),
+        base_template='admin/custom_master.html'
     )
     admin.add_view(SecureModelView(User, db.session))
     admin.add_view(SecureModelView(Role, db.session))
