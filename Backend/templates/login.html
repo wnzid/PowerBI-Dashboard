@@ -30,7 +30,10 @@
             <button type="button" class="toggle-password btn btn-link p-0">Show</button>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+        <button type="submit" id="loginBtn" class="btn btn-primary w-100">
+          <span id="loginSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+          Sign In
+        </button>
         <a href="{{ url_for('auth.forgot_password') }}" class="forgot-password d-block mt-2">Forgot password?</a>
       </form>
     </div>

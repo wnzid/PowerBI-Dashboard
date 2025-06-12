@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('registrationForm');
   const pwdInput = document.getElementById('password');
   const toggleBtn = document.querySelector('.toggle-password');
+  const submitBtn = document.getElementById('registerBtn');
+  const spinner = document.getElementById('registerSpinner');
 
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
@@ -43,6 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       alert('Please select a role to register.');
       return;
+    }
+    if (submitBtn && spinner) {
+      submitBtn.disabled = true;
+      spinner.classList.remove('d-none');
     }
   });
 });
