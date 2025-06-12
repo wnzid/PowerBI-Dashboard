@@ -1,6 +1,9 @@
-document.querySelector('.mobile-nav-toggle').addEventListener('click', function () {
-  document.body.classList.toggle('mobile-nav-active');
-});
+const firstMobileToggle = document.querySelector(".mobile-nav-toggle");
+if (firstMobileToggle) {
+  firstMobileToggle.addEventListener("click", function() {
+    document.body.classList.toggle("mobile-nav-active");
+  });
+}
 
 (function() {
   "use strict";
@@ -22,13 +25,14 @@ document.querySelector('.mobile-nav-toggle').addEventListener('click', function 
    * Mobile nav toggle
    */
   const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
-
-  function mobileNavToogle() {
-    document.querySelector('body').classList.toggle('mobile-nav-active');
-    mobileNavToggleBtn.classList.toggle('bi-list');
-    mobileNavToggleBtn.classList.toggle('bi-x');
+  if (mobileNavToggleBtn) {
+    function mobileNavToogle() {
+      document.querySelector('body').classList.toggle('mobile-nav-active');
+      mobileNavToggleBtn.classList.toggle('bi-list');
+      mobileNavToggleBtn.classList.toggle('bi-x');
+    }
+    mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
   }
-  mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
 
   /**
    * Hide mobile nav on same-page/hash links
