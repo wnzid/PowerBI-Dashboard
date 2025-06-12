@@ -104,19 +104,4 @@ document.addEventListener("DOMContentLoaded", function () {
       renderCharts(filtered);
     });
   }
-
-  const toggle = document.querySelector(".dropdown-toggle");
-  const menu = document.querySelector(".profile-dropdown");
-  if (toggle && menu) {
-    toggle.addEventListener("click", function (e) {
-      e.stopPropagation();
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    });
-    document.addEventListener("click", function () {
-      if (menu.style.display === "block") menu.style.display = "none";
-    });
-    document.getElementById("logout-link").addEventListener("click", function (e) {
-      e.preventDefault();
-    });
-  }
 });

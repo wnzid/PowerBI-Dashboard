@@ -27,12 +27,7 @@
         <a href="{{ url_for('main.coming_soon', page='download') }}">Download</a>
         <a href="{{ url_for('main.help_page') }}">Help</a>
       </div>
-      <div class="user-profile dropdown">
-        <button class="dropdown-toggle">{{ current_user.email.split('@')[0] | title }} ▾</button>
-        <ul class="profile-dropdown">
-          <li><a id="logout-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
-        </ul>
-      </div>
+    
     </header>
     <section class="dashboard-header">
       <h1>Managerial Dashboard</h1>
