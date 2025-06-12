@@ -14,3 +14,12 @@ python Backend/init_db.py
 ```
 
 This script creates the database file if it does not exist.
+
+Before running the server ensure the Python dependencies are installed:
+
+```bash
+pip install -r Backend/requirements.txt
+```
+
+The API now expects `email`, `password` and `role` fields when registering or
+logging in.
