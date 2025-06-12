@@ -9,16 +9,23 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+
+# --- Fernet Key Handling ---
+FERNET_KEY = os.getenv("FERNET_KEY")
+if not FERNET_KEY:
+    raise RuntimeError("FERNET_KEY environment variable is required for password encryption.")
+cipher = Fernet(FERNET_KEY.encode())
+
 def init_db():
-    conn = sqlite3.connect("users.db")
-    c = conn.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            role TEXT NOT NULL)""")
-    conn.commit()
-    conn.close()
+    db_path = os.path.join(BASE_DIR, "users.db")
+    with sqlite3.connect(db_path) as conn:
+        c = conn.cursor()
+        c.execute("""CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                role TEXT NOT NULL)""")
+        conn.commit()
 
 init_db()
 
@@ -38,12 +45,6 @@ app = Flask(__name__,
             static_url_path="/static",
             template_folder="templates")
 app.secret_key = os.getenv("SECRET_KEY", "fallback_secret")
-
-# Fernet uses AES for encryption
-FERNET_KEY = os.getenv("FERNET_KEY")
-if not FERNET_KEY:
-    FERNET_KEY = Fernet.generate_key().decode()
-cipher = Fernet(FERNET_KEY.encode())
 
 
 def encrypt_pw(password: str) -> str:
@@ -95,18 +96,17 @@ def register():
 
         encrypted_pw = encrypt_pw(password)
 
+        db_path = os.path.join(BASE_DIR, "users.db")
         try:
-            conn = sqlite3.connect("users.db")
-            c = conn.cursor()
-            c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-                      (email, encrypted_pw, role))
-            conn.commit()
-            conn.close()
+            with sqlite3.connect(db_path) as conn:
+                c = conn.cursor()
+                c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
+                          (email, encrypted_pw, role))
+                conn.commit()
 
             session['email'] = email
             session['role'] = role
             print("Redirecting to:", "dashboard" if role == "Manager" else "stakeholder_dashboard")
-
 
             if role == "Manager":
                 return redirect(url_for("dashboard"))
@@ -114,13 +114,10 @@ def register():
                 return redirect(url_for("stakeholder_dashboard"))
 
         except sqlite3.IntegrityError:
-            # Ensure the failed insert connection is closed before re-querying
-            conn.close()
-            conn = sqlite3.connect("users.db")
-            c = conn.cursor()
-            c.execute("SELECT role FROM users WHERE email = ?", (email,))
-            result = c.fetchone()
-            conn.close()
+            with sqlite3.connect(db_path) as conn:
+                c = conn.cursor()
+                c.execute("SELECT role FROM users WHERE email = ?", (email,))
+                result = c.fetchone()
 
             if result:
                 existing_role = result[0]
@@ -128,13 +125,8 @@ def register():
             else:
                 message = "This email is already registered"
 
-            #  Flash only once
             flash(message, "error")
-
             return redirect(url_for("register"))
-
-
-
 
     return render_template("registration-page.html")
 
@@ -144,11 +136,11 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        conn = sqlite3.connect("users.db")
-        c = conn.cursor()
-        c.execute("SELECT password, role FROM users WHERE email = ?", (email,))
-        result = c.fetchone()
-        conn.close()
+        db_path = os.path.join(BASE_DIR, "users.db")
+        with sqlite3.connect(db_path) as conn:
+            c = conn.cursor()
+            c.execute("SELECT password, role FROM users WHERE email = ?", (email,))
+            result = c.fetchone()
 
         if result:
             stored_password, role = result
@@ -172,7 +164,7 @@ def login():
                     return redirect(url_for("stakeholder_dashboard"))
             else:
                 flash("Incorrect password", "error")
-                return redirect(url_for("login"))  # stay on login, not register
+                return redirect(url_for("login"))
         else:
             flash("User not found", "error")
             return redirect(url_for("login"))
@@ -188,20 +180,23 @@ def logout():
 
 @app.route("/api/data")
 def api_data():
-    if USE_SP:
-        from office365.runtime.auth.client_credential import ClientCredential
-        from office365.sharepoint.client_context import ClientContext
+    try:
+        if USE_SP:
+            from office365.runtime.auth.client_credential import ClientCredential
+            from office365.sharepoint.client_context import ClientContext
 
-        creds = ClientCredential(SP_CLIENT_ID, SP_CLIENT_SECRET)
-        ctx = ClientContext(SP_SITE_URL).with_credentials(creds)
+            creds = ClientCredential(SP_CLIENT_ID, SP_CLIENT_SECRET)
+            ctx = ClientContext(SP_SITE_URL).with_credentials(creds)
 
-        response = ctx.web.get_file_by_server_relative_url(SP_FILE_PATH).download().execute_query()
-        df = pd.read_excel(BytesIO(response.content), sheet_name=0)
-    else:
-        df = pd.read_excel(DATA_PATH, sheet_name=0)
+            response = ctx.web.get_file_by_server_relative_url(SP_FILE_PATH).download().execute_query()
+            df = pd.read_excel(BytesIO(response.content), sheet_name=0)
+        else:
+            df = pd.read_excel(DATA_PATH, sheet_name=0)
 
-    df = df.fillna(0)
-    return jsonify(df.to_dict(orient="records"))
+        df = df.fillna(0)
+        return jsonify(df.to_dict(orient="records"))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
