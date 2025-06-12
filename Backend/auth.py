@@ -57,6 +57,8 @@ def login():
             db.session.commit()
             if user.role.name.lower() == 'manager':
                 return redirect(url_for('dashboard.dashboard'))
+            if user.role.name.lower() == 'admin':
+                return redirect(url_for('admin.index'))
             return redirect(url_for('dashboard.stakeholder_dashboard'))
         db.session.add(ActivityLog(user_id=user.id if user else None, activity_type='login_failed'))
         db.session.commit()
