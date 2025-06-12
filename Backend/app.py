@@ -51,6 +51,7 @@ def create_app() -> Flask:
     app.config.setdefault('MAIL_PORT', 8025)
     app.config.setdefault('MAIL_DEFAULT_SENDER', 'noreply@example.com')
     app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
+    app.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
 
     mail.init_app(app)
 

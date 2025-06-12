@@ -1,0 +1,8 @@
+/* Admin specific adjustments */
+.container, .container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.navbar-nav .btn.admin-logout {
+  margin-left: 0.5rem;
+}
