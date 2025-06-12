@@ -66,7 +66,7 @@ Backend/              # Flask application
 └── templates/        # Jinja2 HTML templates
 ```
 
-## What's New (Modified Version by Md Nahidul Islam)
+## What's New (Modified Version by wnzid)
 
 The following improvements have been made to enhance the functionality, maintainability, and security of the original project:
 
