@@ -25,3 +25,4 @@ email-validator==2.2.0
 fpdf2==2.7.8
 Flask-Mail==0.10.0
 Flask-Admin==1.6.1
+WTForms==3.0.1
