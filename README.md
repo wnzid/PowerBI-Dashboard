@@ -93,8 +93,6 @@ Backend/              # Flask application
 #### UI/UX and Documentation
 - Refined landing page visuals and dashboard icons
 - Updated README with full deployment instructions
-- Project now includes a proper `LICENSE`, `.git`, and aligned structure for GitHub hosting
-
 
 ---
 
