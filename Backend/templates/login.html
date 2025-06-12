@@ -18,6 +18,7 @@
       {% endwith %}
       <h2 class="login-title">Sign In</h2>
       <form action="{{ url_for('auth.login') }}" method="post" class="login-form">
+        {{ form.hidden_tag() }}
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" placeholder="abc@analyticsinstitute.edu.au" required>

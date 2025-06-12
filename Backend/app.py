@@ -1,5 +1,8 @@
 from flask import Flask
-from db import init_db
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from models import db, User
+from db import DB_PATH
 from auth import auth_bp
 from dashboard import dashboard_bp
 from main_routes import main_bp
@@ -7,9 +10,23 @@ from main_routes import main_bp
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    app.secret_key = "your_secret_key"  # Needed for session management
+    app.config['SECRET_KEY'] = 'your_secret_key'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    init_db()
+    db.init_app(app)
+    Migrate(app, db)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id: str):
+        return db.session.get(User, int(user_id))
+
+    with app.app_context():
+        db.create_all()
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)

@@ -1,33 +1,10 @@
-import sqlite3
-from cryptography.fernet import Fernet
-import os
-from db import get_connection, DB_PATH
+from app import create_app
+from models import db, User
 
-FERNET_KEY = os.getenv("FERNET_KEY")
-if not FERNET_KEY:
-    FERNET_KEY = Fernet.generate_key().decode()
-cipher = Fernet(FERNET_KEY.encode())
+app = create_app()
 
-def decrypt_pw(token: str) -> str:
-    try:
-        return cipher.decrypt(token.encode()).decode()
-    except Exception:
-        return token
-
-# Connect to the SQLite database
-conn = get_connection()
-c = conn.cursor()
-
-# Fetch all users
-c.execute("SELECT * FROM users")
-users = c.fetchall()
-
-# Print users
-print("All registered users:")
-for user in users:
-    user_list = list(user)
-    if len(user_list) > 2:
-        user_list[2] = decrypt_pw(user_list[2])
-    print(tuple(user_list))
-
-conn.close()
+with app.app_context():
+    users = User.query.all()
+    print("All registered users:")
+    for user in users:
+        print(user.id, user.email, user.role)
