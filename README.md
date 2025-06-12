@@ -1,8 +1,73 @@
-# Improving the frontend
+# Power BI Dashboard Portal
 
-## Credits
+A Flask web application for hosting Power BI dashboards for the Analytics Institute of Australia. The portal provides user registration, secure login and role-based dashboards for managers and stakeholders.
 
-This project is originally based on [PowerBI-Dashboard](https://github.com/nafisanafu15/PowerBI-Dashboard) by [Nafisa Anjum Ahmed].  
-Licensed under the [MIT License](https://opensource.org/licenses/MIT).
+## Features
 
-Significant modifications and improvements have been made by wnzid
+- Landing page highlighting real-time KPIs, multi-source integration and advanced filtering
+- User registration with hashed passwords and role selection
+- Secure login and session management
+- Managerial dashboard with sample charts and Power BI integration placeholders
+- Stakeholder dashboard (coming soon)
+- Reporting and help pages
+- SQLite database for storing user accounts
+
+## Getting Started
+
+### Requirements
+
+- Python 3.11+
+- Virtualenv or a similar tool
+
+### Installation
+
+```bash
+# Clone the repository
+ git clone <repo-url>
+ cd PowerBI-Dashboard/Backend
+
+# Create and activate a virtual environment
+ python3 -m venv venv
+ source venv/bin/activate
+
+# Install dependencies
+ pip install -r requirements.txt
+
+# Initialize the database
+ python init_db.py
+```
+
+### Running the Application
+
+```bash
+python app.py
+```
+
+The application starts on **http://localhost:5001**. Visit this URL in your browser to see the landing page. Use the **Register** link to create an account. Managers are redirected to the managerial dashboard; stakeholders go to their own dashboard.
+
+### Viewing Registered Users
+
+A helper script prints all registered users from the SQLite database:
+
+```bash
+python view-users.py
+```
+
+## Project Structure
+
+```
+Backend/              # Flask application
+├── app.py            # Main app entry point
+├── db.py             # SQLite helpers
+├── init_db.py        # Database initialization script
+├── view-users.py     # Utility to inspect stored users
+├── requirements.txt  # Python dependencies
+├── static/           # CSS, JavaScript and images
+└── templates/        # Jinja2 HTML templates
+```
+
+## Acknowledgements
+
+This project is based on [PowerBI-Dashboard](https://github.com/nafisanafu15/PowerBI-Dashboard) by Nafisa Anjum Ahmed and is licensed under the [MIT License](https://opensource.org/licenses/MIT). Significant modifications and improvements have been made by **wnzid**.
+
+
