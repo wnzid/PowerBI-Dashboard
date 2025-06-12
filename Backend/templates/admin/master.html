@@ -1,0 +1,7 @@
+{% extends 'admin/base.html' %}
+{% block menu_links %}
+    {{ super() }}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+    </li>
+{% endblock %}
