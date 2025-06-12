@@ -2,6 +2,8 @@ import sqlite3
 from cryptography.fernet import Fernet
 import os
 
+DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
+
 FERNET_KEY = os.getenv("FERNET_KEY")
 if not FERNET_KEY:
     FERNET_KEY = Fernet.generate_key().decode()
@@ -14,7 +16,7 @@ def decrypt_pw(token: str) -> str:
         return token
 
 # Connect to the SQLite database
-conn = sqlite3.connect("users.db")
+conn = sqlite3.connect(DB_PATH)
 c = conn.cursor()
 
 # Fetch all users

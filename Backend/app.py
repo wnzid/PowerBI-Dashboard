@@ -9,8 +9,13 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+
+# Always use database path relative to this file so Flask can be started
+# from any working directory without creating multiple SQLite files.
+DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
+
 def init_db():
-    conn = sqlite3.connect("users.db")
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,7 +101,7 @@ def register():
         encrypted_pw = encrypt_pw(password)
 
         try:
-            conn = sqlite3.connect("users.db")
+            conn = sqlite3.connect(DB_PATH)
             c = conn.cursor()
             c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
                       (email, encrypted_pw, role))
@@ -116,7 +121,7 @@ def register():
         except sqlite3.IntegrityError:
             # Ensure the failed insert connection is closed before re-querying
             conn.close()
-            conn = sqlite3.connect("users.db")
+            conn = sqlite3.connect(DB_PATH)
             c = conn.cursor()
             c.execute("SELECT role FROM users WHERE email = ?", (email,))
             result = c.fetchone()
@@ -144,7 +149,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
         c.execute("SELECT password, role FROM users WHERE email = ?", (email,))
         result = c.fetchone()
