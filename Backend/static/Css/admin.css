@@ -6,3 +6,16 @@
 .navbar-nav .btn.admin-logout {
   margin-left: 0.5rem;
 }
+
+/* Modern admin landing page */
+.admin-hero {
+  background: linear-gradient(60deg,#5e4ae3,#7b6bd7);
+  color: #fff;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.admin-card {
+  max-width: 600px;
+  margin-top: -3rem;
+}

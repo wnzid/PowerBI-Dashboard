@@ -1,8 +1,17 @@
 {% extends 'admin/custom_master.html' %}
 {% block body %}
-  <div class="container py-5">
-    <h1 class="mb-4">Administration Portal</h1>
-    <p class="lead">Welcome, {{ current_user.email }}. Use the navigation above to manage users, roles and review activity logs.</p>
-    <p>You can access model management screens using the menu at the top.</p>
+  <header class="admin-hero">
+    <div class="container">
+      <h1 class="display-4">Administration Portal</h1>
+      <p class="lead mb-0">Welcome, {{ current_user.email }}</p>
+    </div>
+  </header>
+  <div class="container my-5">
+    <div class="card admin-card shadow-sm mx-auto">
+      <div class="card-body">
+        <p class="mb-4">Use the navigation above to manage users, roles and review activity logs. You can access model management screens using the menu at the top.</p>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-primary">Logout</a>
+      </div>
+    </div>
   </div>
 {% endblock %}
