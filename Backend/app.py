@@ -48,7 +48,7 @@ def register():
             session['email'] = email
             session['role'] = role
             if role.lower() == 'manager':
-                return redirect(url_for('manager_dashboard'))
+                return redirect(url_for('dashboard'))
             else:
                 return redirect(url_for('stakeholder_dashboard'))
         except sqlite3.IntegrityError:
@@ -74,7 +74,7 @@ def login():
             session['email'] = email
             session['role'] = row[1]
             if row[1].lower() == 'manager':
-                return redirect(url_for('manager_dashboard'))
+                return redirect(url_for('dashboard'))
             else:
                 return redirect(url_for('stakeholder_dashboard'))
         else:
@@ -84,7 +84,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/dashboard')
-def manager_dashboard():
+def dashboard():
     if 'email' not in session or session.get('role', '').lower() != 'manager':
         return redirect(url_for('login'))
     return render_template('managerial-landing-dashboard.html')
@@ -94,6 +94,13 @@ def stakeholder_dashboard():
     if 'email' not in session or session.get('role', '').lower() != 'stakeholder':
         return redirect(url_for('login'))
     return render_template('stakeholder-landing-dashboard.html')
+
+
+@app.route('/coming_soon/<page>')
+def coming_soon(page):
+    """Display placeholder pages for features not yet implemented."""
+    title = page.replace('-', ' ').title()
+    return render_template('coming_soon.html', page_title=title)
 
 @app.route('/logout')
 def logout():
