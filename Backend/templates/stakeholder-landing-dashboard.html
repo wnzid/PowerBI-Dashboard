@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Stakeholder Dashboard{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}" />
+{% endblock %}
 {% block content %}
   <div class="container py-5">
-    <h1 class="text-center">Welcome, Stakeholder!</h1>
+    <h1 class="text-center mb-4">Welcome, Stakeholder!</h1>
+    <p class="lead text-center">Your personalized analytics and reports will appear here. Check back soon for more insights.</p>
   </div>
 {% endblock %}
