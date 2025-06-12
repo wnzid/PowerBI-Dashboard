@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from db import get_connection, init_db
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = "your_secret_key"  # Needed for session
 
 def create_schema():
     """Ensure the users table exists."""
@@ -40,6 +41,12 @@ def register():
     except sqlite3.IntegrityError:
         return jsonify({'error': 'Username already exists'}), 409
 
+@app.route('/dashboard')
+def dashboard():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    return render_template('dashboard.html', username=session['username'])
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -51,7 +58,8 @@ def login():
     row = c.fetchone()
     conn.close()
     if row and check_password_hash(row[0], password):
-        return jsonify({'message': 'Login successful'}), 200
+        session['username'] = username
+        return redirect(url_for('dashboard'))  # Redirect to dashboard
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
