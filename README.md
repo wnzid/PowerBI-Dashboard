@@ -8,7 +8,7 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 - User registration with hashed passwords and role selection
 - Secure login and session management
 - Managerial dashboard with sample charts and Power BI integration placeholders
-- Stakeholder dashboard (coming soon)
+- Stakeholder dashboard with welcome page
 - Reporting and help pages
 - SQLite database for storing user accounts
 
