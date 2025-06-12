@@ -35,7 +35,7 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 # Install dependencies
  pip install -r requirements.txt
 
-# Initialize the database (uses Flask-Migrate)
+# Initialize the database (drops existing tables)
  python init_db.py
 ```
 
