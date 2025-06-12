@@ -52,12 +52,9 @@ The application starts on **http://localhost:5001**. Visit this URL in your brow
 
 ### Default Admin Account
 
-An administrator account is created automatically when the application starts if it doesn't already exist:
+An administrator account is created automatically when the application starts if it doesn't already exist
 
-- **Email:** `admin@gmai.com`
-- **Password:** `admin123456789`
-
-Only this user has access to the Flask-Admin interface.
+Only that user has access to the Flask-Admin interface.
 
 ### Viewing Registered Users
 
