@@ -50,6 +50,15 @@ python app.py
 
 The application starts on **http://localhost:5001**. Visit this URL in your browser to see the landing page. Use the **Register** link to create an account. Managers are redirected to the managerial dashboard; stakeholders go to their own dashboard.
 
+### Default Admin Account
+
+An administrator account is created automatically when the application starts if it doesn't already exist:
+
+- **Email:** `admin@gmai.com`
+- **Password:** `admin123456789`
+
+Only this user has access to the Flask-Admin interface.
+
 ### Viewing Registered Users
 
 A helper script prints all registered users from the SQLite database:
