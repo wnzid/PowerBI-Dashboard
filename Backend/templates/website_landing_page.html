@@ -4,12 +4,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='Css/landing.css') }}">
 {% endblock %}
 {% block content %}
-  <section class="hero d-flex align-items-center text-center">
+  <section class="hero d-flex align-items-center text-center text-white" style="background: linear-gradient(60deg,#5e4ae3,#7b6bd7); min-height: 60vh;">
     <div class="container">
-      <h2>Power BI Dashboard Portal –</h2>
-      <h2>Analytics Institute of Australia</h2>
-      <p>A centralized, real-time intelligence system for decision-making, insight, and strategy</p>
-      <a href="{{ url_for('dashboard.dashboard') }}" class="btn-get-started">Get Started</a>
+      <h2 class="display-5 fw-bold mb-3">Power BI Dashboard Portal</h2>
+      <p class="lead mb-4">A centralized, real-time intelligence system for decision-making, insight and strategy</p>
+      <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-light btn-lg">Get Started</a>
     </div>
   </section>
   <section class="section-features bg-light">

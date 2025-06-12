@@ -77,7 +77,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom, #F6E7FF, #C4B7D3);
+  background: #f8f9fa;
   padding: 2rem 1rem;
 }
 .login-card {
@@ -127,17 +127,7 @@ body {
 }
 .btn-primary {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 5px;
   margin-top: 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
-.btn-primary:hover {
-  background-color: #444;
 }
 .forgot-password {
   display: block;
