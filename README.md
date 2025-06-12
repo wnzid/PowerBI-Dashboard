@@ -35,6 +35,10 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 # Install dependencies
  pip install -r requirements.txt
 
+# Copy environment file and configure secrets
+ cp .env.example .env
+ # Edit .env and set SECRET_KEY and other values
+
 # Initialize the database (drops existing tables)
  python init_db.py
 ```
@@ -42,10 +46,10 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 ### Running the Application
 
 ```bash
-python app.py
+python app.py  # or ENABLE_HTTPS=1 python app.py for HTTPS
 ```
 
-The application starts on **http://localhost:5001**. Visit this URL in your browser to see the landing page. Use the **Register** link to create an account. Managers are redirected to the managerial dashboard; stakeholders go to their own dashboard.
+The application starts on **http://localhost:5001** by default. Set `ENABLE_HTTPS=1` to run with HTTPS (self-signed certificate). Visit the URL to see the landing page. Use the **Register** link to create an account. Managers are redirected to the managerial dashboard; stakeholders go to their own dashboard.
 
 ### Viewing Registered Users
 

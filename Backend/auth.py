@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user
 from models import db, User, Role, ActivityLog
 from forms import RegistrationForm, LoginForm, ForgotPasswordForm
+from extensions import limiter
 
 
 auth_bp = Blueprint('auth', __name__)
@@ -30,6 +31,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit('5 per minute')
 def login():
     form = LoginForm()
     if form.validate_on_submit():
