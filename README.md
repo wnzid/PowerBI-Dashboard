@@ -65,8 +65,8 @@ Backend/              # Flask application
 ├── main_routes.py    # General site routes blueprint
 ├── db.py             # Database path configuration
 ├── init_db.py        # Database initialization script
-├── forms.py        # WTForms definitions
-├── models.py       # SQLAlchemy models
+├── forms.py          # WTForms definitions
+├── models.py         # SQLAlchemy models
 ├── view-users.py     # Utility to inspect stored users
 ├── requirements.txt  # Python dependencies
 ├── static/           # CSS, JavaScript and images
