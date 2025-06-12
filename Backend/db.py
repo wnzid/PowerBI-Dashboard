@@ -2,7 +2,9 @@ import os
 import sqlite3
 
 # Path to the SQLite database file
-DB_PATH = os.path.join(os.path.dirname(__file__), 'Backend', 'users.db')
+# Place the SQLite database file alongside this module so the path works
+# regardless of the current working directory.
+DB_PATH = os.path.join(os.path.dirname(__file__), 'users.db')
 
 # SQL schema for the users table
 SCHEMA = '''
