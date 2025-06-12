@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from models import db, User
+from models import db, User, Role
 from db import DB_PATH
 from auth import auth_bp
 from dashboard import dashboard_bp
@@ -27,6 +27,9 @@ def create_app() -> Flask:
 
     with app.app_context():
         db.create_all()
+        if Role.query.count() == 0:
+            db.session.add_all([Role(name='Manager'), Role(name='Stakeholder')])
+            db.session.commit()
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)

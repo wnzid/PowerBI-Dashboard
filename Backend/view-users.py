@@ -7,4 +7,5 @@ with app.app_context():
     users = User.query.all()
     print("All registered users:")
     for user in users:
-        print(user.id, user.email, user.role)
+        role_name = user.role.name if user.role else 'N/A'
+        print(user.id, user.email, role_name)
