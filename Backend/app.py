@@ -5,10 +5,27 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from extensions import mail
 from models import db, User, Role, ActivityLog
+from werkzeug.security import generate_password_hash
+from flask_login import current_user
+from flask import redirect, url_for
 from db import DB_PATH
 from auth import auth_bp
 from dashboard import dashboard_bp
 from main_routes import main_bp
+
+
+class SecureModelView(ModelView):
+    """Restrict Flask-Admin views to predefined admin users."""
+
+    def is_accessible(self) -> bool:
+        return (
+            current_user.is_authenticated
+            and current_user.role
+            and current_user.role.name.lower() == "admin"
+        )
+
+    def inaccessible_callback(self, name: str, **kwargs):
+        return redirect(url_for("auth.login"))
 
 
 def create_app() -> Flask:
@@ -35,14 +52,22 @@ def create_app() -> Flask:
 
     with app.app_context():
         db.create_all()
-        if Role.query.count() == 0:
-            db.session.add_all([Role(name='Manager'), Role(name='Stakeholder')])
+        for role_name in ("Admin", "Manager", "Stakeholder"):
+            if not Role.query.filter_by(name=role_name).first():
+                db.session.add(Role(name=role_name))
+        db.session.commit()
+
+        admin_role = Role.query.filter_by(name="Admin").first()
+        if admin_role and not User.query.filter_by(email="admin@gmai.com").first():
+            hashed_pw = generate_password_hash("admin123456789")
+            admin_user = User(email="admin@gmai.com", password=hashed_pw, role_id=admin_role.id)
+            db.session.add(admin_user)
             db.session.commit()
 
     admin = Admin(app, name='Admin', template_mode='bootstrap4')
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Role, db.session))
-    admin.add_view(ModelView(ActivityLog, db.session))
+    admin.add_view(SecureModelView(User, db.session))
+    admin.add_view(SecureModelView(Role, db.session))
+    admin.add_view(SecureModelView(ActivityLog, db.session))
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
