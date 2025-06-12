@@ -21,6 +21,7 @@ def create_schema():
     conn.close()
 
 @app.route('/')
+@app.route('/landing')
 def home():
     return render_template('website_landing_page.html')  # Render HTML instead of JSON
 
