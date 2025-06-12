@@ -111,6 +111,12 @@ def forgot_password():
     return render_template('forgot_password.html')
 
 
+@app.route('/help')
+def help_page():
+    """Display help and support information."""
+    return render_template('help.html')
+
+
 @app.route('/coming_soon/<page>')
 def coming_soon(page):
     """Display placeholder pages for features not yet implemented."""
