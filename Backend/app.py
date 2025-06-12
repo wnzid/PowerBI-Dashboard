@@ -10,22 +10,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# --- Fernet Key Handling ---
-FERNET_KEY = os.getenv("FERNET_KEY")
-if not FERNET_KEY:
-    raise RuntimeError("FERNET_KEY environment variable is required for password encryption.")
-cipher = Fernet(FERNET_KEY.encode())
+# Always use database path relative to this file so Flask can be started
+# from any working directory without creating multiple SQLite files.
+DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
 
 def init_db():
-    db_path = os.path.join(BASE_DIR, "users.db")
-    with sqlite3.connect(db_path) as conn:
-        c = conn.cursor()
-        c.execute("""CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL,
-                role TEXT NOT NULL)""")
-        conn.commit()
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            role TEXT NOT NULL)""")
+    conn.commit()
+    conn.close()
 
 init_db()
 
@@ -98,11 +96,12 @@ def register():
 
         db_path = os.path.join(BASE_DIR, "users.db")
         try:
-            with sqlite3.connect(db_path) as conn:
-                c = conn.cursor()
-                c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
-                          (email, encrypted_pw, role))
-                conn.commit()
+            conn = sqlite3.connect(DB_PATH)
+            c = conn.cursor()
+            c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
+                      (email, encrypted_pw, role))
+            conn.commit()
+            conn.close()
 
             session['email'] = email
             session['role'] = role
@@ -114,10 +113,13 @@ def register():
                 return redirect(url_for("stakeholder_dashboard"))
 
         except sqlite3.IntegrityError:
-            with sqlite3.connect(db_path) as conn:
-                c = conn.cursor()
-                c.execute("SELECT role FROM users WHERE email = ?", (email,))
-                result = c.fetchone()
+            # Ensure the failed insert connection is closed before re-querying
+            conn.close()
+            conn = sqlite3.connect(DB_PATH)
+            c = conn.cursor()
+            c.execute("SELECT role FROM users WHERE email = ?", (email,))
+            result = c.fetchone()
+            conn.close()
 
             if result:
                 existing_role = result[0]
@@ -136,11 +138,11 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        db_path = os.path.join(BASE_DIR, "users.db")
-        with sqlite3.connect(db_path) as conn:
-            c = conn.cursor()
-            c.execute("SELECT password, role FROM users WHERE email = ?", (email,))
-            result = c.fetchone()
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute("SELECT password, role FROM users WHERE email = ?", (email,))
+        result = c.fetchone()
+        conn.close()
 
         if result:
             stored_password, role = result
