@@ -55,4 +55,4 @@ if __name__ == '__main__':
     # Initialize both the shared database and the local schema
     init_db()
     create_schema()
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
