@@ -34,7 +34,10 @@
           <label for="role" class="form-label">Role</label>
           {{ form.role(class="form-select", id="role") }}
         </div>
-        <button type="submit" class="btn btn-primary w-100">Register</button>
+        <button type="submit" id="registerBtn" class="btn btn-primary w-100">
+          <span id="registerSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+          Register
+        </button>
       </form>
     </div>
   </main>
