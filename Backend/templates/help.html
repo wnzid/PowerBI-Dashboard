@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Help & Support{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Help & Support</h1>
+  <p class="lead">Welcome to the Power BI Dashboard portal. This page provides answers to common questions and guidance on using the site.</p>
+  <hr>
+  <h2>Getting Started</h2>
+  <p>To access dashboards, register for an account or sign in if you already have one. Managers can view managerial dashboards while stakeholders see stakeholder dashboards.</p>
+  <h2 class="mt-4">Frequently Asked Questions</h2>
+  <ul>
+    <li><strong>How do I reset my password?</strong> Use the <a href="{{ url_for('forgot_password') }}">Forgot Password</a> link on the sign in page.</li>
+    <li><strong>Who do I contact for access issues?</strong> Send an email to <a href="mailto:info@analyticsinstitute.edu.au">info@analyticsinstitute.edu.au</a>.</li>
+    <li><strong>Where can I find more documentation?</strong> Additional resources will be added here as features are released.</li>
+  </ul>
+  <h2 class="mt-4">Need More Help?</h2>
+  <p>If you still have questions, please reach out to our support team:</p>
+  <ul>
+    <li>Email: <a href="mailto:info@analyticsinstitute.edu.au">info@analyticsinstitute.edu.au</a></li>
+    <li>Phone: (+61) 426 799 276</li>
+    <li>Address: Pearl Level 10, 607 Bourke St, Melbourne VIC 3000</li>
+  </ul>
+  <a class="btn btn-primary mt-3" href="{{ url_for('home') }}">Return Home</a>
+</div>
+{% endblock %}
