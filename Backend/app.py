@@ -70,8 +70,16 @@ def register():
         password = request.form.get("Password")
         role = request.form.get("Role")  # Make sure your registration form provides this
 
-        if not password or len(password) < 12:
+        print(f"[DEBUG] Registration POST data: email={email}, role={role}, password_length={len(password) if password else 'None'}")
+
+        if not email or not password or not role:
+            flash("All fields are required.", "error")
+            print("[DEBUG] Missing registration fields.")
+            return redirect(url_for("register"))
+
+        if len(password) < 12:
             flash("Password must be at least 12 characters long.", "error")
+            print("[DEBUG] Password too short.")
             return redirect(url_for("register"))
 
         encrypted_pw = encrypt_pw(password)
@@ -82,6 +90,11 @@ def register():
             c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)",
                       (email, encrypted_pw, role))
             conn.commit()
+            print(f"[DEBUG] User {email} inserted into DB.")
+            # Print all users for debugging
+            c.execute("SELECT id, email, role FROM users")
+            users = c.fetchall()
+            print(f"[DEBUG] All users in DB: {users}")
             conn.close()
 
             session['email'] = email
@@ -93,6 +106,7 @@ def register():
                 return redirect(url_for("stakeholder_dashboard"))
 
         except sqlite3.IntegrityError:
+            print(f"[DEBUG] IntegrityError: Email {email} already exists.")
             conn.close()
             conn = sqlite3.connect(DB_PATH)
             c = conn.cursor()
@@ -107,6 +121,10 @@ def register():
                 message = "This email is already registered"
 
             flash(message, "error")
+            return redirect(url_for("register"))
+        except Exception as e:
+            print(f"[DEBUG] Registration DB error: {e}")
+            flash("Registration failed due to a server error.", "error")
             return redirect(url_for("register"))
 
     return render_template("registration-page.html")
