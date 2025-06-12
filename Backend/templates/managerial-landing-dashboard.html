@@ -30,7 +30,7 @@
       <div class="user-profile dropdown">
         <button class="dropdown-toggle">{{ session['email'].split('@')[0] | title }} ▾</button>
         <ul class="profile-dropdown">
-          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          <li><a id="logout-link" href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
       </div>
     </header>
