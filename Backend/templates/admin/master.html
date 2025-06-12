@@ -1,4 +1,18 @@
 {% extends 'admin/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='Css/admin.css') }}">
+{% endblock %}
+{% block menu_links %}
+    <ul class="nav navbar-nav navbar-right">
+        {{ layout.menu_links() }}
+        <li class="nav-item">
+            <a class="btn btn-outline-light admin-logout" href="{{ url_for('auth.logout') }}">Logout</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% extends 'admin/base.html' %}
 {% block menu_links %}
     {{ super() }}
     <li class="nav-item">
