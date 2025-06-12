@@ -1,0 +1,12 @@
+[
+  {"StartDate": "2024-01-01", "Stage": "Student", "Visa Status": "Approved", "Offer Expiry Date": "2024-02-15", "Do you want to pay more than 50% upfront fee?": "Yes", "Is the offer deferred?": "No", "Study Reason": "Career"},
+  {"StartDate": "2024-01-05", "Stage": "Offer", "Visa Status": "Pending", "Offer Expiry Date": "2024-02-20", "Do you want to pay more than 50% upfront fee?": "No", "Is the offer deferred?": "Yes", "Study Reason": "Migration"},
+  {"StartDate": "2024-02-01", "Stage": "Student", "Visa Status": "Approved", "Offer Expiry Date": "2024-03-01", "Do you want to pay more than 50% upfront fee?": "Yes", "Is the offer deferred?": "No", "Study Reason": "Career"},
+  {"StartDate": "2024-02-15", "Stage": "Offer", "Visa Status": "Rejected", "Offer Expiry Date": "2024-03-10", "Do you want to pay more than 50% upfront fee?": "No", "Is the offer deferred?": "No", "Study Reason": "Adventure"},
+  {"StartDate": "2024-03-01", "Stage": "Student", "Visa Status": "Pending", "Offer Expiry Date": "2024-04-01", "Do you want to pay more than 50% upfront fee?": "Yes", "Is the offer deferred?": "Yes", "Study Reason": "Career"},
+  {"StartDate": "2024-03-10", "Stage": "Offer", "Visa Status": "Approved", "Offer Expiry Date": "2024-04-15", "Do you want to pay more than 50% upfront fee?": "No", "Is the offer deferred?": "No", "Study Reason": "Migration"},
+  {"StartDate": "2024-03-20", "Stage": "Student", "Visa Status": "Approved", "Offer Expiry Date": "2024-04-25", "Do you want to pay more than 50% upfront fee?": "Yes", "Is the offer deferred?": "No", "Study Reason": "Career"},
+  {"StartDate": "2024-04-01", "Stage": "Offer", "Visa Status": "Pending", "Offer Expiry Date": "2024-05-01", "Do you want to pay more than 50% upfront fee?": "Yes", "Is the offer deferred?": "No", "Study Reason": "Migration"},
+  {"StartDate": "2024-04-10", "Stage": "Student", "Visa Status": "Rejected", "Offer Expiry Date": "2024-05-15", "Do you want to pay more than 50% upfront fee?": "No", "Is the offer deferred?": "Yes", "Study Reason": "Gap Year"},
+  {"StartDate": "2024-04-20", "Stage": "Offer", "Visa Status": "Approved", "Offer Expiry Date": "2024-05-20", "Do you want to pay more than 50% upfront fee?": "Yes", "Is the offer deferred?": "No", "Study Reason": "Career"}
+]
