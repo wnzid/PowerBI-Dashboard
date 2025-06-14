@@ -29,7 +29,7 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 ```bash
 # Clone the repository
  git clone <repo-url>
- cd PowerBI-Dashboard/Backend
+ cd PowerBI-Dashboard/server
 
 # Create and activate a virtual environment
  python3 -m venv venv
@@ -70,17 +70,19 @@ python view-users.py
 ## Project Structure
 
 ```
-Backend/              # Flask application
+server/               # Flask backend
 ├── app.py            # Application factory and entry point
-├── auth.py           # Authentication blueprint
-├── dashboard.py      # Dashboard blueprint
-├── main_routes.py    # General site routes blueprint
+├── blueprints/       # Flask blueprints
+│   ├── auth.py       # Authentication routes
+│   ├── dashboard.py  # Dashboard routes
+│   └── main_routes.py  # General site routes
+├── forms/            # WTForms definitions
+├── models/           # SQLAlchemy models
 ├── db.py             # Database path configuration
 ├── init_db.py        # Database initialization script
-├── forms.py          # WTForms definitions
-├── models.py         # SQLAlchemy models
 ├── view-users.py     # Utility to inspect stored users
 ├── requirements.txt  # Python dependencies
+frontend/             # Client-side assets
 ├── static/           # CSS, JavaScript and images
 └── templates/        # Jinja2 HTML templates
 ```

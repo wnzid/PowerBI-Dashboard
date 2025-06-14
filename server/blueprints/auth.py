@@ -15,7 +15,11 @@ from forms import (
 from extensions import mail
 
 
-auth_bp = Blueprint('auth', __name__)
+auth_bp = Blueprint(
+    'auth',
+    __name__,
+    template_folder='../../frontend/templates'
+)
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])

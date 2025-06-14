@@ -8,7 +8,11 @@ import pandas as pd
 from fpdf import FPDF
 
 
-dashboard_bp = Blueprint('dashboard', __name__)
+dashboard_bp = Blueprint(
+    'dashboard',
+    __name__,
+    template_folder='../../frontend/templates'
+)
 
 
 @dashboard_bp.route('/dashboard')
@@ -35,7 +39,7 @@ def stakeholder_dashboard():
 @login_required
 def api_data():
     """Return sample dashboard data for charts."""
-    data_file = os.path.join(os.path.dirname(__file__), 'sample_data.json')
+    data_file = os.path.join(os.path.dirname(__file__), '..', 'sample_data.json')
     with open(data_file, 'r') as f:
         data = json.load(f)
     return jsonify(data)
@@ -45,7 +49,7 @@ def api_data():
 @login_required
 def export_data(fmt: str):
     """Export sample dashboard data as Excel or PDF."""
-    data_file = os.path.join(os.path.dirname(__file__), 'sample_data.json')
+    data_file = os.path.join(os.path.dirname(__file__), '..', 'sample_data.json')
     df = pd.read_json(data_file)
     fmt = fmt.lower()
     if fmt == 'excel':

@@ -1,4 +1,5 @@
 from flask import Flask
+import os
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_admin import Admin, AdminIndexView
@@ -9,9 +10,9 @@ from werkzeug.security import generate_password_hash
 from flask_login import current_user
 from flask import redirect, url_for
 from db import DB_PATH
-from auth import auth_bp
-from dashboard import dashboard_bp
-from main_routes import main_bp
+from blueprints.auth import auth_bp
+from blueprints.dashboard import dashboard_bp
+from blueprints.main_routes import main_bp
 
 
 class SecureModelView(ModelView):
@@ -43,7 +44,12 @@ class MyAdminIndexView(AdminIndexView):
 
 
 def create_app() -> Flask:
-    app = Flask(__name__)
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    app = Flask(
+        __name__,
+        static_folder=os.path.join(base_dir, 'frontend', 'static'),
+        template_folder=os.path.join(base_dir, 'frontend', 'templates'),
+    )
     app.config['SECRET_KEY'] = 'your_secret_key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
