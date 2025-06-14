@@ -8,7 +8,7 @@ from extensions import mail
 from models import db, User, Role, ActivityLog
 from werkzeug.security import generate_password_hash
 from flask_login import current_user
-from flask import redirect, url_for
+from flask import redirect, url_for, flash
 from db import DB_PATH
 from blueprints.auth import auth_bp
 from blueprints.dashboard import dashboard_bp
@@ -27,6 +27,12 @@ class SecureModelView(ModelView):
 
     def inaccessible_callback(self, name: str, **kwargs):
         return redirect(url_for("auth.login"))
+
+    def on_model_change(self, form, model, is_created):
+        """Notify admin when user roles are updated."""
+        super().on_model_change(form, model, is_created)
+        if not is_created:
+            flash("Changes saved", "success")
 
 
 class MyAdminIndexView(AdminIndexView):

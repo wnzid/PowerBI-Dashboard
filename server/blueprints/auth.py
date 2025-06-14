@@ -57,6 +57,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
+            flash('Logged in successfully', 'success')
             db.session.add(ActivityLog(user_id=user.id, activity_type='login_success'))
             db.session.commit()
             if user.role.name.lower() == 'manager':
@@ -145,4 +146,5 @@ def change_password():
 @auth_bp.route('/logout')
 def logout():
     logout_user()
+    flash('Logged out successfully', 'info')
     return redirect(url_for('main.home'))

@@ -144,6 +144,11 @@ body {
   color: #c72c41;
 }
 
+/* Search input group width */
+.dashboard-search {
+  max-width: 300px;
+}
+
 /*------------------------------------------------------------
   DASHBOARD BODY: Charts + KPI
 ------------------------------------------------------------*/
@@ -234,4 +239,21 @@ body {
 ------------------------------------------------------------*/
 @media (min-width: 1200px) {
   /* none needed here for this layout */
+}
+
+@media (max-width: 768px) {
+  .dashboard-body {
+    grid-template-columns: 1fr;
+  }
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .kpi-storyboards {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .kpi-card {
+    flex: 1 1 45%;
+    height: auto;
+  }
 }

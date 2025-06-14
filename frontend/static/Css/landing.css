@@ -65,8 +65,8 @@ h2 {
   Hero Section
 -------------------------------------------------------------------*/
 .hero {
-  background: linear-gradient(to right, #d8bce1, #c2aec9);
-  min-height: 70vh;
+  background: linear-gradient(60deg, #5e4ae3, #7b6bd7);
+  min-height: 60vh;
   display: flex;
   align-items: center;
   justify-content: center;
