@@ -77,6 +77,21 @@
       <div class="mt-4">
         <iframe title="Manager Report" width="100%" height="600" src="https://app.powerbi.com/view?r=MANAGER_REPORT_ID" frameborder="0" allowfullscreen="true"></iframe>
       </div>
+
+      <div class="mt-5">
+        <h2>Recently Imported Data</h2>
+        <table class="table" id="importedTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
     <footer class="footer">
       <p>Copyright © 2025 Analytics Institute of Australia</p>
@@ -87,4 +102,19 @@
 {% block extra_js %}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{{ url_for('static', filename='Js/managerial-landing-dashboard.js') }}" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('/api/imported')
+        .then(res => res.json())
+        .then(rows => {
+          const tbody = document.querySelector('#importedTable tbody');
+          rows.forEach(r => {
+            const tr = document.createElement('tr');
+            const approveBtn = r.approved ? '' : `<form method="post" action="/approve/${r.id}"><button class="btn btn-sm btn-primary">Approve</button></form>`;
+            tr.innerHTML = `<td>${r.id}</td><td><pre>${JSON.stringify(r.data)}</pre></td><td>${r.approved ? 'Published' : 'Pending'}</td><td>${approveBtn}</td>`;
+            tbody.appendChild(tr);
+          });
+        });
+    });
+  </script>
 {% endblock %}

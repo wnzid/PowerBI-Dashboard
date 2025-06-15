@@ -9,9 +9,33 @@
     <div class="mb-4 text-center">
       <iframe title="Stakeholder Report" width="100%" height="600" src="https://app.powerbi.com/view?r=STAKEHOLDER_REPORT_ID" frameborder="0" allowfullscreen="true"></iframe>
     </div>
+    <div class="my-4">
+      <h2>Published Metrics</h2>
+      <table class="table" id="publishedTable">
+        <thead><tr><th>Record</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <div class="text-center">
       <a class="btn btn-primary me-2" href="{{ url_for('dashboard.export_data', fmt='pdf') }}">Export PDF</a>
       <a class="btn btn-secondary" href="{{ url_for('dashboard.export_data', fmt='excel') }}">Export Excel</a>
     </div>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('/api/published')
+        .then(res => res.json())
+        .then(rows => {
+          const tbody = document.querySelector('#publishedTable tbody');
+          rows.forEach(r => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td><pre>${JSON.stringify(r)}</pre></td>`;
+            tbody.appendChild(tr);
+          });
+        });
+    });
+  </script>
 {% endblock %}
