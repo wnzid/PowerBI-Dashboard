@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
+    Chart.register(ChartDataLabels);
+  }
   let allData = [];
   let chartCurrent, chartEnrolled, chartVisa, chartExpiry;
 
@@ -58,10 +61,23 @@ document.addEventListener("DOMContentLoaded", function () {
           data: Object.values(visaCounts),
           backgroundColor: ['#5e4ae3', '#f06595', '#74c69d', '#ffd43b', '#adb5bd'],
           borderColor: '#fff',
-          borderWidth: 2
+          borderWidth: 2,
+          spacing: 2
         }]
       },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { padding: 20 } },
+          datalabels: {
+            color: '#000',
+            formatter: (value, ctx) => {
+              const sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              return sum ? ((value / sum) * 100).toFixed(1) + '%';
+            }
+          }
+        }
+      }
     });
 
     const expiryDates = [...new Set(data.map(r => r["Offer Expiry Date"]).filter(Boolean))]
