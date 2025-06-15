@@ -257,3 +257,29 @@ body {
     height: auto;
   }
 }
+
+/* Additional responsive fixes for manager dashboard */
+.chart-card canvas {
+  width: 100% !important;
+  height: 260px !important;
+}
+
+.dashboard-body iframe {
+  width: 100%;
+  border: none;
+}
+
+@media (max-width: 992px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+  .main-content {
+    width: 100%;
+  }
+}
