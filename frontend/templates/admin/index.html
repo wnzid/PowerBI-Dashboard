@@ -11,6 +11,7 @@
       <div class="card-body">
         <p class="mb-4">Use the navigation above to manage users, roles and review activity logs. You can access model management screens using the menu at the top.</p>
         <a href="{{ url_for('dashboard.import_data') }}" class="btn btn-primary me-2">Import Data</a>
+        <a href="{{ url_for('dashboard.list_csv_files') }}" class="btn btn-primary me-2">CSV Files</a>
         <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary">Logout</a>
       </div>
     </div>

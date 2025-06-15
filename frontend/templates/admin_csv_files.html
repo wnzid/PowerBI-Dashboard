@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Manage CSV Files{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Uploaded CSV Files</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Filename</th>
+        <th>Status</th>
+        <th>Active</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in files %}
+      <tr>
+        <td>{{ f.id }}</td>
+        <td>{{ f.filename }}</td>
+        <td>{{ f.status }}</td>
+        <td>{{ 'Yes' if f.active else 'No' }}</td>
+        <td>
+          <form method="post" action="{{ url_for('dashboard.toggle_csv_file', file_id=f.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="btn btn-sm btn-secondary" type="submit">{{ 'Hide' if f.active else 'Unhide' }}</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="{{ url_for('dashboard.delete_csv_file', file_id=f.id) }}" onsubmit="return confirm('Delete this file?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
