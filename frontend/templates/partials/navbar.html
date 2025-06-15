@@ -14,6 +14,9 @@
         {% elif current_user.is_authenticated and current_user.role.name.lower() == 'stakeholder' %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.stakeholder_dashboard') }}">Dashboard</a></li>
         {% endif %}
+        {% if current_user.is_authenticated and current_user.role.name.lower() == 'admin' %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.import_data') }}">Import Data</a></li>
+        {% endif %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('main.reports') }}">Reports</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('main.help_page') }}">Help</a></li>
       </ul>

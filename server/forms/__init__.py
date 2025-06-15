@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, PasswordField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
@@ -34,3 +35,8 @@ class ChangePasswordForm(FlaskForm):
     new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=6), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Change Password')
+
+
+class CSVUploadForm(FlaskForm):
+    file = FileField('CSV File', validators=[FileRequired(), FileAllowed(['csv'], 'CSV only!')])
+    submit = SubmitField('Upload')

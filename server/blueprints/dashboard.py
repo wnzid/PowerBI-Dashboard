@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify, send_file
+from flask import Blueprint, render_template, redirect, url_for, jsonify, send_file, flash, request
 from flask_login import login_required, current_user
-from models import db, ActivityLog
+from models import db, ActivityLog, ImportedData
+from forms import CSVUploadForm
 import os
 import json
 from io import BytesIO
@@ -82,3 +83,62 @@ def export_data(fmt: str):
             mimetype='application/pdf',
         )
     return 'Unsupported format', 400
+
+
+@dashboard_bp.route('/admin/import-data', methods=['GET', 'POST'])
+@login_required
+def import_data():
+    """Admin upload of CSV files"""
+    if current_user.role.name.lower() != 'admin':
+        return redirect(url_for('auth.login'))
+    form = CSVUploadForm()
+    if form.validate_on_submit():
+        file = form.file.data
+        df = pd.read_csv(file)
+        for _, row in df.iterrows():
+            db.session.add(ImportedData(data=row.to_dict(), uploaded_by=current_user))
+        db.session.commit()
+        flash('Data imported', 'success')
+        return redirect(url_for('dashboard.dashboard'))
+    return render_template('import_data.html', form=form)
+
+
+@dashboard_bp.route('/api/imported')
+@login_required
+def api_imported():
+    """Return recently imported data for managers."""
+    if current_user.role.name.lower() != 'manager':
+        return jsonify([])
+    records = ImportedData.query.order_by(ImportedData.timestamp.desc()).all()
+    payload = [
+        {
+            'id': r.id,
+            'data': r.data,
+            'approved': r.approved,
+            'timestamp': r.timestamp.isoformat()
+        }
+        for r in records
+    ]
+    return jsonify(payload)
+
+
+@dashboard_bp.route('/approve/<int:record_id>', methods=['POST'])
+@login_required
+def approve_record(record_id: int):
+    if current_user.role.name.lower() != 'manager':
+        return 'Forbidden', 403
+    rec = db.session.get(ImportedData, record_id)
+    if rec:
+        rec.approved = True
+        db.session.commit()
+    return redirect(url_for('dashboard.dashboard'))
+
+
+@dashboard_bp.route('/api/published')
+@login_required
+def api_published():
+    if current_user.role.name.lower() != 'stakeholder':
+        return jsonify([])
+    records = ImportedData.query.filter_by(approved=True).all()
+    payload = [r.data for r in records]
+    return jsonify(payload)
