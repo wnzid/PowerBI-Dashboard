@@ -136,6 +136,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <script>
     window.APPROVED_DATA = {{ approved_data | tojson }};
+    window.CSRF_TOKEN = "{{ csrf_token() }}";
   </script>
   <script src="{{ url_for('static', filename='Js/managerial-landing-dashboard.js') }}" defer></script>
   <script>
@@ -146,7 +147,11 @@
           const tbody = document.querySelector('#importedTable tbody');
           rows.forEach(r => {
             const tr = document.createElement('tr');
-            const approveBtn = r.approved ? '' : `<form method="post" action="/approve/${r.id}"><button class="btn btn-sm btn-primary">Approve</button></form>`;
+            const approveBtn = r.approved
+              ? ''
+              : `<form method="post" action="/approve/${r.id}">` +
+                `<input type="hidden" name="csrf_token" value="${window.CSRF_TOKEN}">` +
+                `<button class="btn btn-sm btn-primary" type="submit">Approve</button></form>`;
             tr.innerHTML = `<td>${r.id}</td><td><pre>${JSON.stringify(r.data)}</pre></td><td>${r.approved ? 'Published' : 'Pending'}</td><td>${approveBtn}</td>`;
             tbody.appendChild(tr);
           });
