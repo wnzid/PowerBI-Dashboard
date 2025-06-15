@@ -9,8 +9,6 @@ from forms import (
     LoginForm,
     ForgotPasswordForm,
     ResetPasswordForm,
-    UpdateProfileForm,
-    ChangePasswordForm,
 )
 from extensions import mail
 
@@ -109,38 +107,6 @@ def reset_password(token: str):
         return redirect(url_for('auth.login'))
     return render_template('reset_password.html', form=form, token=token)
 
-
-@auth_bp.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
-    profile_form = UpdateProfileForm(obj=current_user)
-    if profile_form.validate_on_submit():
-        if User.query.filter(User.email == profile_form.email.data, User.id != current_user.id).first():
-            flash('Email already in use', 'error')
-            return redirect(url_for('auth.profile'))
-        current_user.email = profile_form.email.data
-        db.session.commit()
-        flash('Profile updated', 'success')
-        return redirect(url_for('auth.profile'))
-    pw_form = ChangePasswordForm()
-    return render_template('profile.html', profile_form=profile_form, pw_form=pw_form)
-
-
-@auth_bp.route('/change-password', methods=['POST'])
-@login_required
-def change_password():
-    profile_form = UpdateProfileForm()  # not used
-    pw_form = ChangePasswordForm()
-    if pw_form.validate_on_submit():
-        if not check_password_hash(current_user.password, pw_form.current_password.data):
-            flash('Current password incorrect', 'error')
-            return redirect(url_for('auth.profile'))
-        current_user.password = generate_password_hash(pw_form.new_password.data)
-        db.session.commit()
-        flash('Password changed successfully', 'success')
-        return redirect(url_for('auth.profile'))
-    flash('Please correct the errors', 'error')
-    return redirect(url_for('auth.profile'))
 
 
 @auth_bp.route('/logout')
