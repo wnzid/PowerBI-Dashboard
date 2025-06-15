@@ -41,15 +41,33 @@ class ActivityLog(db.Model):
         return f"<Activity {self.activity_type} user={self.user_id}>"
 
 
+class CSVFile(db.Model):
+    """Metadata about uploaded CSV files."""
+    __tablename__ = 'csv_files'
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(255), nullable=False)
+    status = db.Column(db.String(20), default='pending')  # pending/approved/declined
+    active = db.Column(db.Boolean, default=True)
+    uploaded_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    uploaded_by = db.relationship('User', backref='csv_files')
+
+    def __repr__(self) -> str:
+        return f"<CSVFile {self.filename} status={self.status}>"
+
+
 class ImportedData(db.Model):
     """Store rows imported from CSV files."""
     __tablename__ = 'imported_data'
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.JSON, nullable=False)
     approved = db.Column(db.Boolean, default=False)
+    csv_file_id = db.Column(db.Integer, db.ForeignKey('csv_files.id'), nullable=True)
     uploaded_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+    csv_file = db.relationship('CSVFile', backref='rows')
     uploaded_by = db.relationship('User', backref='imports')
 
     def __repr__(self) -> str:

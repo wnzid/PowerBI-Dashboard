@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify, send_file, flash, request
 from flask_login import login_required, current_user
-from models import db, ActivityLog, ImportedData
+from models import db, ActivityLog, ImportedData, CSVFile
 from forms import CSVUploadForm
 import os
 import json
@@ -95,8 +95,17 @@ def import_data():
     if form.validate_on_submit():
         file = form.file.data
         df = pd.read_csv(file)
+        csv_file = CSVFile(filename=file.filename, uploaded_by=current_user)
+        db.session.add(csv_file)
+        db.session.flush()
         for _, row in df.iterrows():
-            db.session.add(ImportedData(data=row.to_dict(), uploaded_by=current_user))
+            db.session.add(
+                ImportedData(
+                    data=row.to_dict(),
+                    uploaded_by=current_user,
+                    csv_file=csv_file,
+                )
+            )
         db.session.commit()
         flash('Data imported', 'success')
         return redirect(url_for('dashboard.dashboard'))
@@ -115,6 +124,9 @@ def api_imported():
             'id': r.id,
             'data': r.data,
             'approved': r.approved,
+            'file_id': r.csv_file_id,
+            'file_status': r.csv_file.status if r.csv_file else None,
+            'file_active': r.csv_file.active if r.csv_file else None,
             'timestamp': r.timestamp.isoformat()
         }
         for r in records
@@ -139,7 +151,15 @@ def approve_record(record_id: int):
 def api_published():
     if current_user.role.name.lower() != 'stakeholder':
         return jsonify([])
-    records = ImportedData.query.filter_by(approved=True).all()
+    records = (
+        ImportedData.query.join(CSVFile)
+        .filter(
+            ImportedData.approved.is_(True),
+            CSVFile.status == 'approved',
+            CSVFile.active.is_(True),
+        )
+        .all()
+    )
     payload = [r.data for r in records]
     return jsonify(payload)
 
@@ -177,3 +197,78 @@ def settings_page():
     if current_user.role.name.lower() != 'manager':
         return redirect(url_for('auth.login'))
     return render_template('settings.html')
+
+
+# ---- Admin CSV file management ----
+
+@dashboard_bp.route('/admin/csv-files')
+@login_required
+def list_csv_files():
+    if current_user.role.name.lower() != 'admin':
+        return redirect(url_for('auth.login'))
+    files = CSVFile.query.order_by(CSVFile.timestamp.desc()).all()
+    return render_template('admin_csv_files.html', files=files)
+
+
+@dashboard_bp.route('/admin/csv-files/hide/<int:file_id>', methods=['POST'])
+@login_required
+def toggle_csv_file(file_id: int):
+    if current_user.role.name.lower() != 'admin':
+        return redirect(url_for('auth.login'))
+    f = db.session.get(CSVFile, file_id)
+    if f:
+        f.active = not f.active
+        db.session.commit()
+    return redirect(url_for('dashboard.list_csv_files'))
+
+
+@dashboard_bp.route('/admin/csv-files/delete/<int:file_id>', methods=['POST'])
+@login_required
+def delete_csv_file(file_id: int):
+    if current_user.role.name.lower() != 'admin':
+        return redirect(url_for('auth.login'))
+    f = db.session.get(CSVFile, file_id)
+    if f:
+        ImportedData.query.filter_by(csv_file_id=file_id).delete()
+        db.session.delete(f)
+        db.session.commit()
+    return redirect(url_for('dashboard.list_csv_files'))
+
+
+# ---- Manager CSV approval ----
+
+@dashboard_bp.route('/manager/csv-files')
+@login_required
+def manager_csv_files():
+    if current_user.role.name.lower() != 'manager':
+        return redirect(url_for('auth.login'))
+    files = CSVFile.query.filter_by(status='pending').order_by(CSVFile.timestamp.desc()).all()
+    return render_template('manager_csv_files.html', files=files)
+
+
+@dashboard_bp.route('/manager/csv-files/approve/<int:file_id>', methods=['POST'])
+@login_required
+def approve_csv_file(file_id: int):
+    if current_user.role.name.lower() != 'manager':
+        return '', 403
+    f = db.session.get(CSVFile, file_id)
+    if f:
+        f.status = 'approved'
+        for row in f.rows:
+            row.approved = True
+        db.session.commit()
+    return '', 204
+
+
+@dashboard_bp.route('/manager/csv-files/decline/<int:file_id>', methods=['POST'])
+@login_required
+def decline_csv_file(file_id: int):
+    if current_user.role.name.lower() != 'manager':
+        return '', 403
+    f = db.session.get(CSVFile, file_id)
+    if f:
+        f.status = 'declined'
+        for row in f.rows:
+            row.approved = False
+        db.session.commit()
+    return '', 204

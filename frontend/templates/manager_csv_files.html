@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Approve CSV Files{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Pending CSV Files</h1>
+  <table class="table table-striped" id="pendingCsvTable">
+    <thead>
+      <tr><th>ID</th><th>Filename</th><th>Uploaded</th><th></th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for f in files %}
+      <tr data-id="{{ f.id }}">
+        <td>{{ f.id }}</td>
+        <td>{{ f.filename }}</td>
+        <td>{{ f.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td><button class="btn btn-sm btn-success approve-btn">Approve</button></td>
+        <td><button class="btn btn-sm btn-danger decline-btn">Decline</button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('pendingCsvTable');
+    table.addEventListener('click', e => {
+      if(e.target.classList.contains('approve-btn') || e.target.classList.contains('decline-btn')) {
+        const row = e.target.closest('tr');
+        const id = row.dataset.id;
+        const action = e.target.classList.contains('approve-btn') ? 'approve' : 'decline';
+        fetch(`/manager/csv-files/${action}/${id}`, {
+          method: 'POST',
+          headers: {'X-CSRFToken': '{{ csrf_token() }}'}
+        }).then(res => {
+          if(res.ok) row.remove();
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}
