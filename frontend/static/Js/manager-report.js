@@ -1,3 +1,7 @@
+if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
+  Chart.register(ChartDataLabels);
+}
+
 // Render report specific charts
 function renderReport(data) {
   let ctx = document.getElementById('reportChart');
@@ -50,10 +54,20 @@ function renderReport(data) {
         data: Object.values(visaCounts),
         backgroundColor: ['#5e4ae3', '#f06595', '#74c69d', '#ffd43b', '#adb5bd'],
         borderWidth: 2,
-        borderColor: '#fff'
+        borderColor: '#fff',
+        spacing: 2
       }]
     };
-    options.plugins = { legend: { position: 'bottom' } };
+    options.plugins = {
+      legend: { position: 'bottom', labels: { padding: 20 } },
+      datalabels: {
+        color: '#000',
+        formatter: (value, ctx) => {
+          const sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+          return sum ? ((value / sum) * 100).toFixed(1) + '%';
+        }
+      }
+    };
   } else if (reportName === 'offer-expiry') {
     chartType = 'line';
     const expiryDates = [...new Set(data.map(r => r['Offer Expiry Date']).filter(Boolean))]
