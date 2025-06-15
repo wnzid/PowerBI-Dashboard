@@ -9,14 +9,13 @@
   <div class="row min-vh-100">
     <nav class="col-md-2 bg-light sidebar p-3">
       <div class="text-center mb-4">
-        <img src="{{ url_for('static', filename='Assets/logo.png') }}" class="img-fluid" alt="Analytics Institute Logo" />
         <h4 class="mt-2">Analytics Institute</h4>
       </div>
       <ul class="nav flex-column">
         <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.coming_soon', page='create-dashboard') }}">Create Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.coming_soon', page='download-data') }}">Download Data</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.coming_soon', page='settings') }}">Settings</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.create_dashboard') }}">Create Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.download_data_page') }}">Download Data</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.settings_page') }}">Settings</a></li>
       </ul>
     </nav>
 
@@ -34,7 +33,7 @@
           <div class="card h-100 chart-card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Current Student vs Enrolled</h5>
-              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='current-student') }}">View Report</a>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('dashboard.report_detail', report_name='current-student') }}">View Report</a>
             </div>
             <div class="card-body">
               <canvas id="chart-current-enrolled"></canvas>
@@ -45,7 +44,7 @@
           <div class="card h-100 chart-card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Enrolled Vs Offer</h5>
-              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='enrolled-offer') }}">View Report</a>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('dashboard.report_detail', report_name='enrolled-offer') }}">View Report</a>
             </div>
             <div class="card-body">
               <canvas id="chart-enrolled-offer"></canvas>
@@ -56,7 +55,7 @@
           <div class="card h-100 chart-card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Visa Breakdown</h5>
-              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='visa-breakdown') }}">View Report</a>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('dashboard.report_detail', report_name='visa-breakdown') }}">View Report</a>
             </div>
             <div class="card-body">
               <canvas id="chart-visa-breakdown"></canvas>
@@ -67,7 +66,7 @@
           <div class="card h-100 chart-card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0">Offer Expiry Surge</h5>
-              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='offer-expiry') }}">View Report</a>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('dashboard.report_detail', report_name='offer-expiry') }}">View Report</a>
             </div>
             <div class="card-body">
               <canvas id="chart-offer-expiry-surge"></canvas>
