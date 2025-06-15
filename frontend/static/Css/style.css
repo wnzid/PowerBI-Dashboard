@@ -31,6 +31,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  min-height: 100vh;
 }
 
 .logo {
@@ -152,19 +153,16 @@ body {
 /*------------------------------------------------------------
   DASHBOARD BODY: Charts + KPI
 ------------------------------------------------------------*/
+
+/* Dashboard layout */
 .dashboard-body {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 1rem;
   padding: 1rem;
   background: #fff;
 }
 
 /* Charts grid */
 .charts-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  --bs-gutter-x: 1rem;
 }
 
 /* individual chart card */
@@ -199,9 +197,7 @@ body {
 
 /* KPI storyboards */
 .kpi-storyboards {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  --bs-gutter-x: 1rem;
 }
 
 .kpi-storyboards__title {
@@ -242,19 +238,9 @@ body {
 }
 
 @media (max-width: 768px) {
-  .dashboard-body {
-    grid-template-columns: 1fr;
-  }
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
-  .kpi-storyboards {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  .kpi-card {
-    flex: 1 1 45%;
-    height: auto;
+  .charts-grid .col-lg-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 
@@ -270,16 +256,7 @@ body {
 }
 
 @media (max-width: 992px) {
-  .app-container {
-    flex-direction: column;
-  }
   .sidebar {
-    width: 100%;
-    flex-direction: row;
-    border-right: none;
-    border-bottom: 1px solid #ddd;
-  }
-  .main-content {
-    width: 100%;
+    min-height: auto;
   }
 }
