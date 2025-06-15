@@ -32,7 +32,16 @@ function renderReport(data) {
     chartType = 'doughnut';
     const visaCounts = {};
     data.forEach(r => {
-      const v = r['Visa Status'] || 'Unknown';
+      let status = r['Visa Status'];
+      if (!status) {
+        for (const key in r) {
+          if (key && key.toLowerCase().replace(/\s+/g, '') === 'visastatus') {
+            status = r[key];
+            break;
+          }
+        }
+      }
+      const v = (status || 'Unknown').trim();
       visaCounts[v] = (visaCounts[v] || 0) + 1;
     });
     chartData = {
