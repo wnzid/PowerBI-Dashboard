@@ -23,7 +23,17 @@ def dashboard():
         return redirect(url_for('auth.login'))
     db.session.add(ActivityLog(user_id=current_user.id, activity_type='view_manager_dashboard'))
     db.session.commit()
-    return render_template('managerial-landing-dashboard.html')
+    records = (
+        ImportedData.query.join(CSVFile)
+        .filter(
+            ImportedData.approved.is_(True),
+            CSVFile.status == 'approved',
+            CSVFile.active.is_(True),
+        )
+        .all()
+    )
+    approved_data = [r.data for r in records]
+    return render_template('managerial-landing-dashboard.html', approved_data=approved_data)
 
 
 @dashboard_bp.route('/stakeholder')
