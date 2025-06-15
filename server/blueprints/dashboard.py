@@ -115,7 +115,14 @@ def import_data():
             )
         db.session.commit()
         flash('Data imported', 'success')
-        return redirect(url_for('dashboard.dashboard'))
+        user_role = current_user.role.name.lower()
+        if user_role == 'admin':
+            return redirect(url_for('admin.index'))
+        if user_role == 'manager':
+            return redirect(url_for('dashboard.dashboard'))
+        if user_role == 'stakeholder':
+            return redirect(url_for('dashboard.stakeholder_dashboard'))
+        return redirect(url_for('auth.login'))
     return render_template('import_data.html', form=form)
 
 
