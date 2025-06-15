@@ -91,13 +91,19 @@ document.addEventListener("DOMContentLoaded", function () {
       "+" + topPct + "% chose " + topReason;
   }
 
-  fetch("/api/imported")
-    .then(res => res.json())
-    .then(data => {
-      allData = data;
-      renderCharts(allData);
-    })
-    .catch(err => console.error("Data load error:", err));
+  function loadData(data) {
+    allData = data;
+    renderCharts(allData);
+  }
+
+  if (window.APPROVED_DATA) {
+    loadData(window.APPROVED_DATA);
+  } else {
+    fetch("/api/imported")
+      .then(res => res.json())
+      .then(loadData)
+      .catch(err => console.error("Data load error:", err));
+  }
 
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
