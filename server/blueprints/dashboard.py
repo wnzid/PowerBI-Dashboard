@@ -88,13 +88,20 @@ def export_data(fmt: str):
 @dashboard_bp.route('/admin/import-data', methods=['GET', 'POST'])
 @login_required
 def import_data():
-    """Admin upload of CSV files"""
+    """Admin upload of CSV or Excel files"""
     if current_user.role.name.lower() != 'admin':
         return redirect(url_for('auth.login'))
     form = CSVUploadForm()
     if form.validate_on_submit():
         file = form.file.data
-        df = pd.read_csv(file)
+        ext = os.path.splitext(file.filename)[1].lower()
+        if ext == '.csv':
+            df = pd.read_csv(file)
+        elif ext in ('.xlsx', '.xls'):
+            df = pd.read_excel(file)
+        else:
+            flash('Unsupported file format', 'error')
+            return redirect(url_for('dashboard.import_data'))
         csv_file = CSVFile(filename=file.filename, uploaded_by=current_user)
         db.session.add(csv_file)
         db.session.flush()
