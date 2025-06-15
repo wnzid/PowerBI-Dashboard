@@ -14,8 +14,17 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='Css/landing.css') }}" />
   {% block extra_head %}{% endblock %}
 </head>
-<body>
-  {% include 'partials/navbar.html' %}
+  <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+      {% for category, msg in messages %}
+      <li class="flash {{ category }}">{{ msg }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% include 'partials/navbar.html' %}
   {% block content %}{% endblock %}
   <div class="toast-container position-fixed top-0 end-0 p-3"></div>
   {% include 'partials/footer.html' %}
