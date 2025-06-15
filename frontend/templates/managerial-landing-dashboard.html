@@ -1,86 +1,116 @@
 {% extends "base.html" %}
-{% block title %}Managerial Dashboard – KPI Overview{% endblock %}
+{% block title %}Managerial Dashboard{% endblock %}
 {% block extra_head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}" />
 {% endblock %}
+
 {% block content %}
-<div class="container-fluid app-container">
-  <nav class="sidebar">
-    <div class="logo">
-      <img src="{{ url_for('static', filename='Assets/logo.png') }}" alt="Analytics Institute Logo" />
-      <h2>Analytics Institute</h2>
-    </div>
-    <ul class="nav-links">
-      <li class="active"><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
-      <li><a href="{{ url_for('main.coming_soon', page='create-dashboard') }}">Create Dashboard</a></li>
-      <li><a href="{{ url_for('main.coming_soon', page='download-data') }}">Download Data</a></li>
-      <li><a href="{{ url_for('main.coming_soon', page='settings') }}">Settings</a></li>
-    </ul>
-  </nav>
-  <main class="main-content">
-    <header class="topbar">
-      <div class="menu-links">
-        <a href="{{ url_for('main.coming_soon', page='file') }}">File</a>
-        <a href="{{ url_for('main.coming_soon', page='data') }}">Data</a>
-        <a href="{{ url_for('main.coming_soon', page='export') }}">Export</a>
-        <a href="{{ url_for('main.coming_soon', page='analysis') }}">Analysis</a>
-        <a href="{{ url_for('main.coming_soon', page='download') }}">Download</a>
-        <a href="{{ url_for('main.help_page') }}">Help</a>
+<div class="container-fluid">
+  <div class="row min-vh-100">
+    <nav class="col-md-2 bg-light sidebar p-3">
+      <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='Assets/logo.png') }}" class="img-fluid" alt="Analytics Institute Logo" />
+        <h4 class="mt-2">Analytics Institute</h4>
       </div>
-    
-    </header>
-    <section class="dashboard-header">
-      <h1>Managerial Dashboard</h1>
-      <div class="input-group my-3 dashboard-search">
-        <span class="input-group-text" id="search-label"><i class="fas fa-search"></i></span>
-        <input type="text" id="searchInput" class="form-control" placeholder="Search data" aria-label="Search" aria-describedby="search-label">
-      </div>
-    </section>
-    <section class="dashboard-body">
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3>Current Student vs Enrolled</h3>
-          <a class="view-report" href="{{ url_for('main.coming_soon', page='current-student') }}">View Report</a>
-          <canvas id="chart-current-enrolled"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Enrolled Vs Offer</h3>
-          <a class="view-report" href="{{ url_for('main.coming_soon', page='enrolled-offer') }}">View Report</a>
-          <canvas id="chart-enrolled-offer"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Visa Breakdown</h3>
-          <a class="view-report" href="{{ url_for('main.coming_soon', page='visa-breakdown') }}">View Report</a>
-          <canvas id="chart-visa-breakdown"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Offer Expiry Surge</h3>
-          <a class="view-report" href="{{ url_for('main.coming_soon', page='offer-expiry') }}">View Report</a>
-          <canvas id="chart-offer-expiry-surge"></canvas>
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.coming_soon', page='create-dashboard') }}">Create Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.coming_soon', page='download-data') }}">Download Data</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.coming_soon', page='settings') }}">Settings</a></li>
+      </ul>
+    </nav>
+
+    <main class="col-md-10 px-md-5 py-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Managerial Dashboard</h1>
+        <div class="input-group dashboard-search w-auto">
+          <span class="input-group-text" id="search-label"><i class="fas fa-search"></i></span>
+          <input type="text" id="searchInput" class="form-control" placeholder="Search data" aria-label="Search" aria-describedby="search-label" />
         </div>
       </div>
-      <aside class="kpi-storyboards">
-        <h2 class="kpi-storyboards__title">Storyboards</h2>
-        <div class="kpi-card blue">
-          <h4>Due Payments</h4>
-          <p id="story-due-payments"></p>
+
+      <div class="row g-4 charts-grid">
+        <div class="col-lg-6">
+          <div class="card h-100 chart-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Current Student vs Enrolled</h5>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='current-student') }}">View Report</a>
+            </div>
+            <div class="card-body">
+              <canvas id="chart-current-enrolled"></canvas>
+            </div>
+          </div>
         </div>
-        <div class="kpi-card orange">
-          <h4>Course Performance</h4>
-          <p id="story-course-performance"></p>
+        <div class="col-lg-6">
+          <div class="card h-100 chart-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Enrolled Vs Offer</h5>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='enrolled-offer') }}">View Report</a>
+            </div>
+            <div class="card-body">
+              <canvas id="chart-enrolled-offer"></canvas>
+            </div>
+          </div>
         </div>
-      <div class="kpi-card green">
-        <h4>Top Study Reasons</h4>
-        <p id="story-study-reasons"></p>
+        <div class="col-lg-6">
+          <div class="card h-100 chart-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Visa Breakdown</h5>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='visa-breakdown') }}">View Report</a>
+            </div>
+            <div class="card-body">
+              <canvas id="chart-visa-breakdown"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card h-100 chart-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Offer Expiry Surge</h5>
+              <a class="btn btn-sm btn-outline-primary" href="{{ url_for('main.coming_soon', page='offer-expiry') }}">View Report</a>
+            </div>
+            <div class="card-body">
+              <canvas id="chart-offer-expiry-surge"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
-      </aside>
-      <div class="mt-4">
+
+      <h2 class="mt-5">Storyboards</h2>
+      <div class="row g-4 kpi-storyboards">
+        <div class="col-md-4">
+          <div class="card text-white bg-primary kpi-card h-100 text-center">
+            <div class="card-body">
+              <h6 class="card-title">Due Payments</h6>
+              <p id="story-due-payments" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-warning kpi-card h-100 text-center">
+            <div class="card-body">
+              <h6 class="card-title">Course Performance</h6>
+              <p id="story-course-performance" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-success kpi-card h-100 text-center">
+            <div class="card-body">
+              <h6 class="card-title">Top Study Reasons</h6>
+              <p id="story-study-reasons" class="card-text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="my-5">
         <iframe title="Manager Report" width="100%" height="600" src="https://app.powerbi.com/view?r=MANAGER_REPORT_ID" frameborder="0" allowfullscreen="true"></iframe>
       </div>
 
       <div class="mt-5">
         <h2>Recently Imported Data</h2>
-        <table class="table" id="importedTable">
+        <table class="table table-striped" id="importedTable">
           <thead>
             <tr>
               <th>ID</th>
@@ -92,13 +122,15 @@
           <tbody></tbody>
         </table>
       </div>
-    </section>
-    <footer class="footer">
-      <p>Copyright © 2025 Analytics Institute of Australia</p>
-    </footer>
-  </main>
+
+      <footer class="footer mt-5 text-center">
+        <p class="small mb-0">&copy; 2025 Analytics Institute of Australia</p>
+      </footer>
+    </main>
+  </div>
 </div>
 {% endblock %}
+
 {% block extra_js %}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{{ url_for('static', filename='Js/managerial-landing-dashboard.js') }}" defer></script>
