@@ -132,7 +132,16 @@ def api_imported():
     """Return recently imported data for managers."""
     if current_user.role.name.lower() != 'manager':
         return jsonify([])
-    records = ImportedData.query.order_by(ImportedData.timestamp.desc()).all()
+    records = (
+        ImportedData.query.join(CSVFile)
+        .filter(
+            ImportedData.approved.is_(True),
+            CSVFile.status == 'approved',
+            CSVFile.active.is_(True),
+        )
+        .order_by(ImportedData.timestamp.desc())
+        .all()
+    )
     payload = [
         {
             'id': r.id,
@@ -141,7 +150,7 @@ def api_imported():
             'file_id': r.csv_file_id,
             'file_status': r.csv_file.status if r.csv_file else None,
             'file_active': r.csv_file.active if r.csv_file else None,
-            'timestamp': r.timestamp.isoformat()
+            'timestamp': r.timestamp.isoformat(),
         }
         for r in records
     ]
