@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} Report{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='Css/style.css') }}" />
+{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4 text-center">{{ title }} Report</h1>
+  <canvas id="reportChart" height="400"></canvas>
+  <div class="text-center mt-4">
+    <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>const reportName = "{{ report_name }}";</script>
+  <script src="{{ url_for('static', filename='Js/manager-report.js') }}" defer></script>
+{% endblock %}

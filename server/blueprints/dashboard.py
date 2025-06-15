@@ -142,3 +142,38 @@ def api_published():
     records = ImportedData.query.filter_by(approved=True).all()
     payload = [r.data for r in records]
     return jsonify(payload)
+
+
+# ----- Manager specific pages -----
+
+@dashboard_bp.route('/report/<report_name>')
+@login_required
+def report_detail(report_name: str):
+    if current_user.role.name.lower() != 'manager':
+        return redirect(url_for('auth.login'))
+    title = report_name.replace('-', ' ').title()
+    return render_template('manager-report.html', report_name=report_name, title=title)
+
+
+@dashboard_bp.route('/manager/create-dashboard')
+@login_required
+def create_dashboard():
+    if current_user.role.name.lower() != 'manager':
+        return redirect(url_for('auth.login'))
+    return render_template('create_dashboard.html')
+
+
+@dashboard_bp.route('/manager/download-data')
+@login_required
+def download_data_page():
+    if current_user.role.name.lower() != 'manager':
+        return redirect(url_for('auth.login'))
+    return render_template('download_data.html')
+
+
+@dashboard_bp.route('/manager/settings')
+@login_required
+def settings_page():
+    if current_user.role.name.lower() != 'manager':
+        return redirect(url_for('auth.login'))
+    return render_template('settings.html')

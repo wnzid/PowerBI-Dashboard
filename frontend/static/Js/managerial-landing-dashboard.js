@@ -42,12 +42,17 @@ document.addEventListener("DOMContentLoaded", function () {
       visaCounts[v] = (visaCounts[v] || 0) + 1;
     });
     chartVisa = new Chart(document.getElementById("chart-visa-breakdown"), {
-      type: "pie",
+      type: "doughnut",
       data: {
         labels: Object.keys(visaCounts),
-        datasets: [{ data: Object.values(visaCounts) }]
+        datasets: [{
+          data: Object.values(visaCounts),
+          backgroundColor: ['#5e4ae3', '#f06595', '#74c69d', '#ffd43b', '#adb5bd'],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
       },
-      options: { responsive: true }
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     });
 
     const expiryDates = [...new Set(data.map(r => r["Offer Expiry Date"]).filter(Boolean))]
