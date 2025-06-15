@@ -8,7 +8,7 @@
 <main class="login-main py-5 bg-light">
   <div class="login-card shadow-sm bg-white p-4 rounded">
     <h2 class="login-title">Update Profile</h2>
-    <form action="{{ url_for('auth.profile') }}" method="post" class="login-form mb-4">
+    <form action="{{ url_for('users.profile') }}" method="post" class="login-form mb-4">
       {{ profile_form.hidden_tag() }}
       <div class="mb-3">
         <label for="email" class="form-label">Email</label>
@@ -17,7 +17,7 @@
       <button type="submit" class="btn btn-primary w-100">Update Profile</button>
     </form>
     <h2 class="login-title">Change Password</h2>
-    <form action="{{ url_for('auth.change_password') }}" method="post" class="login-form">
+    <form action="{{ url_for('users.change_password') }}" method="post" class="login-form">
       {{ pw_form.hidden_tag() }}
       <div class="mb-3">
         <label for="current_password" class="form-label">Current Password</label>

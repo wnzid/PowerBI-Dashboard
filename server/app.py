@@ -13,6 +13,7 @@ from flask_login import current_user
 from flask import redirect, url_for, flash
 from db import DB_PATH
 from blueprints.auth import auth_bp
+from blueprints.users import users_bp
 from blueprints.dashboard import dashboard_bp
 from blueprints.main_routes import main_bp
 
@@ -118,6 +119,7 @@ def create_app() -> Flask:
     admin.add_view(SecureModelView(ActivityLog, db.session))
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(users_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(main_bp)
 

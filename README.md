@@ -76,6 +76,7 @@ server/               # Flask backend
 ├── app.py            # Application factory and entry point
 ├── blueprints/       # Flask blueprints
 │   ├── auth.py       # Authentication routes
+│   ├── users.py      # User profile management
 │   ├── dashboard.py  # Dashboard routes
 │   └── main_routes.py  # General site routes
 ├── forms/            # WTForms definitions
