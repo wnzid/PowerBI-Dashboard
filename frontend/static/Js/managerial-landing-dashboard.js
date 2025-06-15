@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "+" + topPct + "% chose " + topReason;
   }
 
-  fetch("/api/data")
+  fetch("/api/imported")
     .then(res => res.json())
     .then(data => {
       allData = data;

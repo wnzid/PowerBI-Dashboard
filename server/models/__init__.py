@@ -39,3 +39,18 @@ class ActivityLog(db.Model):
 
     def __repr__(self) -> str:
         return f"<Activity {self.activity_type} user={self.user_id}>"
+
+
+class ImportedData(db.Model):
+    """Store rows imported from CSV files."""
+    __tablename__ = 'imported_data'
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.JSON, nullable=False)
+    approved = db.Column(db.Boolean, default=False)
+    uploaded_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    uploaded_by = db.relationship('User', backref='imports')
+
+    def __repr__(self) -> str:
+        return f"<ImportedData {self.id} approved={self.approved}>"

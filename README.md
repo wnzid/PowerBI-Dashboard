@@ -99,6 +99,7 @@ frontend/             # Client-side assets
 - Added password reset via email
 - Users can edit profile and change password
 - Included Flask-Admin interface for managing users and roles
+- Added CSV data import workflow with manager approval before stakeholder visibility
 
 #### Security & Role Management
 - Role-based access now dynamically managed via database (not hardcoded)
@@ -113,6 +114,12 @@ frontend/             # Client-side assets
 #### UI/UX and Documentation
 - Refined landing page visuals and dashboard icons
 - Updated README with full deployment instructions
+
+### Data Import Workflow
+1. **Admin uploads CSV** via the **Import Data** link (also accessible from the Manager dashboard sidebar).
+2. Uploaded rows are stored in the database as `ImportedData` records.
+3. **Managers** can review and approve these rows from their dashboard.
+4. Approved rows become visible on the Stakeholder dashboard as summary metrics.
 
 ---
 
