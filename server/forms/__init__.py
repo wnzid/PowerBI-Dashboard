@@ -38,5 +38,12 @@ class ChangePasswordForm(FlaskForm):
 
 
 class CSVUploadForm(FlaskForm):
-    file = FileField('CSV File', validators=[FileRequired(), FileAllowed(['csv'], 'CSV only!')])
+    """Upload form for CSV or Excel files."""
+    file = FileField(
+        'Data File',
+        validators=[
+            FileRequired(),
+            FileAllowed(['csv', 'xlsx', 'xls'], 'CSV or Excel only!'),
+        ],
+    )
     submit = SubmitField('Upload')

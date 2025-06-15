@@ -11,13 +11,13 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}">Home</a></li>
         {% if current_user.is_authenticated and current_user.role.name.lower() == 'manager' %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.manager_csv_files') }}">Approve CSV</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.manager_csv_files') }}">Approve Files</a></li>
         {% elif current_user.is_authenticated and current_user.role.name.lower() == 'stakeholder' %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.stakeholder_dashboard') }}">Dashboard</a></li>
         {% endif %}
         {% if current_user.is_authenticated and current_user.role.name.lower() == 'admin' %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.import_data') }}">Import Data</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.list_csv_files') }}">CSV Files</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.list_csv_files') }}">Uploaded Files</a></li>
         {% endif %}
         <li class="nav-item"><a class="nav-link" href="{{ url_for('main.reports') }}">Reports</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('main.help_page') }}">Help</a></li>
