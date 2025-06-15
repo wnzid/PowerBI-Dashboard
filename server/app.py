@@ -4,7 +4,9 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from extensions import mail
+from extensions import mail, csrf
+from flask import request
+from werkzeug.middleware.proxy_fix import ProxyFix
 from models import db, User, Role, ActivityLog
 from werkzeug.security import generate_password_hash
 from flask_login import current_user
@@ -66,6 +68,7 @@ def create_app() -> Flask:
     app.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
 
     mail.init_app(app)
+    csrf.init_app(app)
 
     db.init_app(app)
     Migrate(app, db)
@@ -73,6 +76,17 @@ def create_app() -> Flask:
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
+
+    if os.getenv("FLASK_ENV") == "production":
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+        app.config["SESSION_COOKIE_SECURE"] = True
+        app.config["REMEMBER_COOKIE_SECURE"] = True
+
+        @app.before_request
+        def enforce_https():
+            if not request.is_secure:
+                url = request.url.replace("http://", "https://", 1)
+                return redirect(url, code=301)
 
     @login_manager.user_loader
     def load_user(user_id: str):

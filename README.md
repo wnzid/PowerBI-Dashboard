@@ -7,6 +7,8 @@ A Flask web application for hosting Power BI dashboards for the Analytics Instit
 - Landing page highlighting real-time KPIs, multi-source integration and advanced filtering
 - User registration with hashed passwords and role selection
 - Secure login and session management
+- Built-in CSRF protection for all forms
+- Automatic HTTPS redirect in production
 - Password reset via email
 - Profile editing and password change
 - Admin panel for managing users and roles
