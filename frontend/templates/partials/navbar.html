@@ -1,12 +1,21 @@
+{% set endpoint = request.endpoint %}
+{% set is_home = endpoint == 'main.home' %}
+{% set is_dashboard_page = endpoint == 'dashboard.dashboard' %}
 <nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
   <div class="container px-4">
-    <a class="navbar-brand" href="{{ url_for('main.home') }}">
-      <img src="{{ url_for('static', filename='Assets/logo.png') }}" alt="Logo"/>
+    <a class="navbar-brand{% if is_home %} mx-auto{% endif %}" href="{{ url_for('main.home') }}">
+      <img src="{{ url_for('static', filename='Assets/dashlogo.svg') }}" alt="Logo"/>
     </a>
+    {% if not is_home %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
+      {% if is_dashboard_page %}
+        <div class="ms-auto">
+          <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light">Logout</a>
+        </div>
+      {% else %}
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}">Home</a></li>
         {% if current_user.is_authenticated and current_user.role.name.lower() == 'manager' %}
@@ -34,6 +43,8 @@
           <a href="{{ url_for('auth.register') }}" class="btn btn-light">Register</a>
         {% endif %}
       </div>
+      {% endif %}
     </div>
+    {% endif %}
   </div>
 </nav>
